@@ -8,6 +8,7 @@ use ratatui::{
 };
 
 pub fn popup(f: &mut Frame, app: &App, title: &str, mut lines: Vec<Line<'static>>) {
+    lines = lines.into_iter().map(Line::centered).collect();
     if !lines.is_empty() {
         lines.push(Line::raw(""));
     }
@@ -17,7 +18,7 @@ pub fn popup(f: &mut Frame, app: &App, title: &str, mut lines: Vec<Line<'static>
     let [area] = Layout::horizontal([Constraint::Length(width.max(30))]).flex(Flex::Center).areas(area);
     let block = Block::bordered().title(title.to_string()).padding(ratatui::widgets::Padding::uniform(1));
     f.render_widget(Clear, area);
-    f.render_widget(Paragraph::new(lines).block(block).centered(), area);
+    f.render_widget(Paragraph::new(lines).block(block), area);
 }
 
 fn entry(app: &App, item: Item, selected: bool) -> Line<'static> {
