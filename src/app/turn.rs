@@ -1,5 +1,5 @@
 use super::Game;
-use crate::domain::{Move, Player, ai, without};
+use crate::domain::{Move, ai, without};
 
 impl Game {
     pub(super) fn play(&mut self, m: Move) {
@@ -22,7 +22,7 @@ impl Game {
                 }
                 self.turn = self.turn.other();
                 self.roll();
-            } else if self.turn == Player::Black {
+            } else if self.ai == Some(self.turn) {
                 let m = ai::best(&self.board, self.turn, &self.dice, self.level, &mut self.rng).unwrap();
                 self.play(m);
             } else {

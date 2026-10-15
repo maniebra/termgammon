@@ -4,4 +4,5 @@ pub enum Action {
     Enter,
     Cancel,
     CycleLevel,
+    CycleMode,
 }

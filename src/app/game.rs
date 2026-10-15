@@ -13,6 +13,7 @@ pub struct Game {
     pub msg: String,
     pub log: Vec<String>,
     pub level: Level,
+    pub ai: Option<Player>,
     pub(super) rng: Rng,
 }
 
@@ -27,6 +28,7 @@ impl Game {
             msg: String::new(),
             log: vec![],
             level: Level::Medium,
+            ai: Some(Player::Black),
             rng: Rng::new(),
         };
         g.roll();
@@ -40,16 +42,29 @@ impl Game {
     }
 
     pub fn handle(&mut self, a: Action) {
-        if self.board.winner().is_some() {
-            return;
+        match a {
+            Action::CycleLevel => return self.level = self.level.next(),
+            Action::CycleMode => return self.cycle_mode(),
+            _ if self.board.winner().is_some() => return,
+            _ => {}
         }
         match a {
             Action::Left => self.cursor = (self.cursor + OFF) % (OFF + 1),
             Action::Right => self.cursor = (self.cursor + 1) % (OFF + 1),
             Action::Cancel => self.selected = None,
-            Action::CycleLevel => self.level = self.level.next(),
             Action::Enter => self.enter(),
+            _ => {}
         }
+    }
+
+    fn cycle_mode(&mut self) {
+        self.ai = match self.ai {
+            Some(Player::Black) => Some(Player::White),
+            Some(Player::White) => None,
+            None => Some(Player::Black),
+        };
+        self.selected = None;
+        self.advance();
     }
 
     pub(super) fn legal(&self) -> Vec<Move> {
