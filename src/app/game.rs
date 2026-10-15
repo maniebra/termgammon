@@ -54,11 +54,8 @@ impl Game {
     pub(super) fn reset(&mut self) {
         self.board = Board::default();
         self.cube = Cube::default();
-        self.phase = Phase::Roll;
-        self.turn = Player::White;
-        self.dice.clear();
         self.selected = None;
-        self.advance();
+        self.opening();
     }
 
     pub fn targets(&self) -> Vec<Option<usize>> {

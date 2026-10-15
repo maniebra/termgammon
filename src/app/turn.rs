@@ -1,5 +1,5 @@
 use super::{Game, Phase};
-use crate::domain::{Move, without};
+use crate::domain::{Move, Player, without};
 
 impl Game {
     pub(super) fn play(&mut self, m: Move) {
@@ -13,6 +13,19 @@ impl Game {
         self.dice = if a == b { vec![a; 4] } else { vec![a, b] };
         self.phase = Phase::Move;
         self.log.push(format!("{:?} rolled {:?}:", self.turn, self.dice));
+    }
+
+    pub(super) fn opening(&mut self) {
+        let (w, b) = loop {
+            let (w, b) = (self.rng.die(), self.rng.die());
+            if w != b {
+                break (w, b);
+            }
+        };
+        self.turn = if w > b { Player::White } else { Player::Black };
+        self.dice = vec![w, b];
+        self.phase = Phase::Move;
+        self.log.push(format!("Opening roll: White {w}, Black {b}. {:?} starts:", self.turn));
     }
 
     pub(super) fn advance(&mut self) {
