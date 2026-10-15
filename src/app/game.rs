@@ -1,11 +1,14 @@
-use super::Action;
-use crate::domain::{Board, Move, Player, ai::Level};
+use super::Phase;
+use crate::domain::{Board, Cube, Move, Player, ai::Level};
 use crate::shared::Rng;
 
 pub const OFF: usize = 24;
 
 pub struct Game {
     pub board: Board,
+    pub cube: Cube,
+    pub phase: Phase,
+    pub score: [u32; 2],
     pub turn: Player,
     pub dice: Vec<u8>,
     pub cursor: usize,
@@ -21,6 +24,9 @@ impl Game {
     pub fn new() -> Self {
         let mut g = Self {
             board: Board::default(),
+            cube: Cube::default(),
+            phase: Phase::Roll,
+            score: [0; 2],
             turn: Player::White,
             dice: vec![],
             cursor: 0,
@@ -35,11 +41,13 @@ impl Game {
         g
     }
 
-    fn reset(&mut self) {
+    pub(super) fn reset(&mut self) {
         self.board = Board::default();
+        self.cube = Cube::default();
+        self.phase = Phase::Roll;
         self.turn = Player::White;
+        self.dice.clear();
         self.selected = None;
-        self.roll();
         self.advance();
     }
 
@@ -48,59 +56,15 @@ impl Game {
         self.legal().iter().filter(|m| Some(m.from) == from).map(|m| m.to).collect()
     }
 
-    pub fn handle(&mut self, a: Action) {
-        match a {
-            Action::CycleLevel => return self.level = self.level.next(),
-            Action::CycleMode => return self.cycle_mode(),
-            Action::NewGame => return self.reset(),
-            _ if self.board.winner().is_some() => return,
-            _ => {}
-        }
-        match a {
-            Action::Left => self.cursor = (self.cursor + OFF) % (OFF + 1),
-            Action::Right => self.cursor = (self.cursor + 1) % (OFF + 1),
-            Action::Cancel => self.selected = None,
-            Action::Enter => self.enter(),
-            _ => {}
-        }
-    }
-
-    fn cycle_mode(&mut self) {
-        self.ai = match self.ai {
-            Some(Player::Black) => Some(Player::White),
-            Some(Player::White) => None,
-            None => Some(Player::Black),
-        };
-        self.selected = None;
-        self.advance();
+    pub fn actor(&self) -> Player {
+        if self.phase == Phase::Offer { self.turn.other() } else { self.turn }
     }
 
     pub(super) fn legal(&self) -> Vec<Move> {
         self.board.legal_moves(self.turn, &self.dice)
     }
 
-    fn source(&self) -> Option<Option<usize>> {
+    pub(super) fn source(&self) -> Option<Option<usize>> {
         if self.board.bar[self.turn.idx()] > 0 { Some(None) } else { self.selected }
-    }
-
-    fn enter(&mut self) {
-        let at = (self.cursor < OFF).then_some(self.cursor);
-        let legal = self.legal();
-        let Some(from) = self.source() else {
-            match legal.iter().any(|m| m.from == at) {
-                true => self.selected = Some(at),
-                false => self.msg = "No move from there".into(),
-            }
-            return;
-        };
-        self.selected = None;
-        match legal.into_iter().find(|m| m.from == from && m.to == at) {
-            Some(m) => {
-                self.msg.clear();
-                self.play(m);
-                self.advance();
-            }
-            None => self.msg = "Illegal move".into(),
-        }
     }
 }

@@ -10,6 +10,10 @@ pub fn action(key: KeyCode) -> Option<Action> {
         KeyCode::Char('a') => Some(Action::CycleLevel),
         KeyCode::Char('m') => Some(Action::CycleMode),
         KeyCode::Char('n') => Some(Action::NewGame),
+        KeyCode::Char('r') => Some(Action::Roll),
+        KeyCode::Char('d') => Some(Action::Double),
+        KeyCode::Char('y') => Some(Action::Take),
+        KeyCode::Char('p') => Some(Action::Pass),
         _ => None,
     }
 }

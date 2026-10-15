@@ -6,4 +6,8 @@ pub enum Action {
     CycleLevel,
     CycleMode,
     NewGame,
+    Roll,
+    Double,
+    Take,
+    Pass,
 }
