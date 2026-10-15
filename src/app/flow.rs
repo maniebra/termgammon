@@ -42,3 +42,20 @@ impl App {
         self.screen = Screen::Playing;
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::app::Action::*;
+
+    #[test]
+    fn menu_flow() {
+        let mut app = App::new();
+        [Enter, Up, Up, Enter].into_iter().for_each(|a| app.handle(a));
+        assert_eq!(app.screen, Screen::Playing);
+        [Cancel, Quit, Enter].into_iter().for_each(|a| app.handle(a));
+        assert_eq!((app.screen, app.quit), (Screen::Pause, false));
+        [Quit, Down, Enter].into_iter().for_each(|a| app.handle(a));
+        assert!(app.quit);
+    }
+}
