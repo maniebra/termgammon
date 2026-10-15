@@ -6,6 +6,10 @@ const AI_DELAY: u8 = 8;
 impl Game {
     pub fn tick(&mut self) {
         self.ticks = self.ticks.wrapping_add(1);
+        if self.anim > 0 {
+            self.anim -= 1;
+            return;
+        }
         if self.wait > 0 {
             self.wait -= 1;
             return;

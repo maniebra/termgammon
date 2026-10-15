@@ -1,5 +1,6 @@
 mod board;
 mod cell;
+mod dice;
 mod help;
 mod menu;
 mod panel;

@@ -10,7 +10,7 @@ pub fn draw(f: &mut Frame, g: &Game) {
     let [left, right] = Layout::horizontal([Constraint::Length(50), Constraint::Min(30)]).areas(f.area());
     let [board, _] = Layout::vertical([Constraint::Length(15), Constraint::Min(0)]).areas(left);
     let [info, log, keys] =
-        Layout::vertical([Constraint::Length(9), Constraint::Min(4), Constraint::Length(5)]).areas(right);
+        Layout::vertical([Constraint::Length(14), Constraint::Min(4), Constraint::Length(5)]).areas(right);
     f.render_widget(Paragraph::new(super::board::lines(g)).block(Block::bordered().title(" termgammon ")), board);
     f.render_widget(Paragraph::new(super::panel::info(g)).block(Block::bordered().title(" game ")), info);
     let shown = log.height.saturating_sub(2) as usize;

@@ -6,19 +6,19 @@ use ratatui::{
 };
 
 pub fn info(g: &Game) -> Vec<Line<'static>> {
-    let dice: Vec<String> = g.dice.iter().map(|&d| char::from_u32(0x267f + d as u32).unwrap().to_string()).collect();
     let owner = g.cube.owner.map_or("center".into(), |p| format!("{p:?}"));
     let mode = g.ai.map_or("hotseat".into(), |p| format!("{:?} AI as {p:?}", g.level));
     let turn = Span::styled(format!("● {:?}", g.turn), Style::default().fg(style::player(g.turn)));
-    vec![
-        Line::from(vec![Span::raw("Turn   "), turn]),
-        Line::raw(format!("Dice   {}", if dice.is_empty() { "-".into() } else { dice.join(" ") })),
+    let mut lines = vec![Line::from(vec![Span::raw("Turn   "), turn])];
+    lines.extend(super::dice::art(g));
+    lines.extend([
         Line::raw(format!("Cube   {} ({owner})", g.cube.value)),
         Line::raw(format!("Score  White {}  Black {}", g.score[0], g.score[1])),
         Line::raw(format!("Mode   {mode}")),
         Line::raw(""),
         Line::styled(prompt(g), Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD)),
-    ]
+    ]);
+    lines
 }
 
 pub fn keys() -> Vec<Line<'static>> {

@@ -1,6 +1,8 @@
 use super::{Game, Phase};
 use crate::domain::{Move, Player, without};
 
+const ROLL_FRAMES: u8 = 8;
+
 impl Game {
     pub(super) fn play(&mut self, m: Move) {
         self.board.apply(self.turn, m);
@@ -11,6 +13,7 @@ impl Game {
     pub(super) fn roll(&mut self) {
         let (a, b) = (self.rng.die(), self.rng.die());
         self.dice = if a == b { vec![a; 4] } else { vec![a, b] };
+        self.show(a, b);
         self.phase = Phase::Move;
         self.log.push(format!("{:?} rolled {:?}:", self.turn, self.dice));
     }
@@ -24,6 +27,7 @@ impl Game {
         };
         self.turn = if w > b { Player::White } else { Player::Black };
         self.dice = vec![w, b];
+        self.show(w, b);
         self.phase = Phase::Move;
         self.log.push(format!("Opening roll: White {w}, Black {b}. {:?} starts:", self.turn));
     }
@@ -49,6 +53,11 @@ impl Game {
         self.selected = None;
         self.turn = self.turn.other();
         self.phase = Phase::Roll;
+    }
+
+    fn show(&mut self, a: u8, b: u8) {
+        self.rolled = vec![a, b];
+        self.anim = ROLL_FRAMES;
     }
 
     pub(super) fn note(&mut self, s: &str) {
