@@ -1,4 +1,6 @@
+pub mod ai;
 mod board;
+mod eval;
 mod moves;
 mod player;
 mod rules;
