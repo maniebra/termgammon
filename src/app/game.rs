@@ -11,6 +11,7 @@ pub struct Game {
     pub cursor: usize,
     pub selected: Option<Option<usize>>,
     pub msg: String,
+    pub log: Vec<String>,
     pub level: Level,
     pub(super) rng: Rng,
 }
@@ -24,6 +25,7 @@ impl Game {
             cursor: 0,
             selected: None,
             msg: String::new(),
+            log: vec![],
             level: Level::Medium,
             rng: Rng::new(),
         };

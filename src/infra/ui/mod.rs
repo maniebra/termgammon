@@ -28,8 +28,11 @@ pub fn draw(f: &mut Frame, g: &Game) {
         Line::raw(""),
         Line::raw(format!(" Turn: {:?}   Dice: {:?}   AI: {:?}", g.turn, g.dice, g.level)),
         Line::raw(format!(" {}", g.msg)),
+        Line::raw(""),
         Line::raw(" ←/→ move  Enter select/drop  Esc cancel  a ai level  q quit"),
     ];
+    let log = g.log.iter().rev().take(4).rev().map(|s| Line::raw(format!(" {s}")));
+    let lines: Vec<Line> = lines.into_iter().chain(log).collect();
     let block = Block::bordered().title(" termgammon ");
     f.render_widget(Paragraph::new(lines).block(block), f.area());
 }
