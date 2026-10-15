@@ -1,35 +1,25 @@
-mod points;
-mod status;
+mod board;
+mod cell;
+mod panel;
 mod style;
 
-use crate::app::{Game, OFF};
+use crate::app::Game;
 use ratatui::{
     Frame,
-    style::Color,
-    text::{Line, Span},
+    layout::{Constraint, Layout},
+    text::Line,
     widgets::{Block, Paragraph},
 };
 
 pub fn draw(f: &mut Frame, g: &Game) {
-    let targets = g.targets();
-    let b = &g.board;
-    let top: Vec<usize> = (12..24).collect();
-    let bottom: Vec<usize> = (0..12).rev().collect();
-    let off = format!(" OFF  W:{}  B:{} ", b.off[0], b.off[1]);
-    let mut lines = vec![
-        points::labels(&top),
-        points::cells(g, &top, &targets),
-        Line::raw(""),
-        Line::raw(format!(" BAR  W:{}  B:{}", b.bar[0], b.bar[1])),
-        Line::raw(""),
-        points::cells(g, &bottom, &targets),
-        points::labels(&bottom),
-        Line::raw(""),
-        Line::from(Span::styled(off, style::of(g, OFF, &targets, Color::Reset))),
-        Line::raw(""),
-    ];
-    lines.extend(status::lines(g));
-    lines.extend(g.log.iter().rev().take(4).rev().map(|s| Line::raw(format!(" {s}"))));
-    let block = Block::bordered().title(" termgammon ");
-    f.render_widget(Paragraph::new(lines).block(block), f.area());
+    let [left, right] = Layout::horizontal([Constraint::Length(50), Constraint::Min(30)]).areas(f.area());
+    let [board, _] = Layout::vertical([Constraint::Length(15), Constraint::Min(0)]).areas(left);
+    let [info, log, keys] =
+        Layout::vertical([Constraint::Length(9), Constraint::Min(4), Constraint::Length(5)]).areas(right);
+    f.render_widget(Paragraph::new(board::lines(g)).block(Block::bordered().title(" termgammon ")), board);
+    f.render_widget(Paragraph::new(panel::info(g)).block(Block::bordered().title(" game ")), info);
+    let shown = log.height.saturating_sub(2) as usize;
+    let lines: Vec<Line> = g.log.iter().rev().take(shown).rev().map(|s| Line::raw(s.clone())).collect();
+    f.render_widget(Paragraph::new(lines).block(Block::bordered().title(" log ")), log);
+    f.render_widget(Paragraph::new(panel::keys()).block(Block::bordered().title(" keys ")), keys);
 }
