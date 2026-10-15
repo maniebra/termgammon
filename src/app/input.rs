@@ -27,11 +27,15 @@ impl Game {
     }
 
     fn cycle_mode(&mut self) {
-        self.ai = match self.ai {
+        self.set_ai(match self.ai {
             Some(Player::Black) => Some(Player::White),
             Some(Player::White) => None,
             None => Some(Player::Black),
-        };
+        });
+    }
+
+    pub fn set_ai(&mut self, ai: Option<Player>) {
+        self.ai = ai;
         self.selected = None;
         self.advance();
     }
