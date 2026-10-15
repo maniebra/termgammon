@@ -1,11 +1,10 @@
 use super::Game;
-use crate::domain::{Move, Player, ai};
+use crate::domain::{Move, Player, ai, without};
 
 impl Game {
     pub(super) fn play(&mut self, m: Move) {
         self.board.apply(self.turn, m);
-        let i = self.dice.iter().position(|&d| d == m.die).unwrap();
-        self.dice.remove(i);
+        self.dice = without(&self.dice, m.die);
     }
 
     pub(super) fn roll(&mut self) {

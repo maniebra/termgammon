@@ -5,8 +5,7 @@ impl Board {
         self.bar[p.idx()] == 0 && (0..24).filter(|&i| !p.in_home(i)).all(|i| self.count(p, i) == 0)
     }
 
-    // ponytail: no forced max-dice-usage rule; any legal single-die move is allowed
-    pub fn legal_moves(&self, p: Player, dice: &[u8]) -> Vec<Move> {
+    pub fn single_moves(&self, p: Player, dice: &[u8]) -> Vec<Move> {
         let mut dice = dice.to_vec();
         dice.sort();
         dice.dedup();
@@ -39,6 +38,16 @@ impl Board {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn must_use_larger_die() {
+        let mut b = Board { points: [0; 24], ..Board::default() };
+        b.points[8] = 1;
+        b.points[20] = 1;
+        b.points[14] = -2;
+        b.points[15] = -2;
+        assert_eq!(b.legal_moves(Player::White, &[6, 5]), vec![Move { from: Some(8), to: Some(2), die: 6 }]);
+    }
 
     #[test]
     fn rules() {
