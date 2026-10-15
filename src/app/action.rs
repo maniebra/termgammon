@@ -1,11 +1,12 @@
+#[derive(Clone, Copy, PartialEq, Eq)]
 pub enum Action {
+    Up,
+    Down,
     Left,
     Right,
     Enter,
     Cancel,
-    CycleLevel,
-    CycleMode,
-    NewGame,
+    Quit,
     Roll,
     Double,
     Take,

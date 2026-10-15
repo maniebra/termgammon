@@ -26,6 +26,6 @@ impl Game {
     pub(super) fn finish(&mut self, winner: Player, points: u32) {
         self.score[winner.idx()] += points;
         self.phase = Phase::Over;
-        self.log.push(format!("{winner:?} wins {points} point(s). Press n for a new game"));
+        self.log.push(format!("{winner:?} wins {points} point(s). Enter for next game"));
     }
 }

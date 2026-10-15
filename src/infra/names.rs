@@ -9,15 +9,14 @@ pub fn level(s: &str) -> Option<Level> {
     }
 }
 
-pub fn ai(s: &str) -> Option<Option<Player>> {
+pub fn side(s: &str) -> Option<Player> {
     match s {
-        "black" => Some(Some(Player::Black)),
-        "white" => Some(Some(Player::White)),
-        "none" => Some(None),
+        "black" => Some(Player::Black),
+        "white" => Some(Player::White),
         _ => None,
     }
 }
 
-pub fn ai_name(p: Option<Player>) -> String {
-    p.map_or("none".into(), |p| format!("{p:?}").to_lowercase())
+pub fn lower(v: impl std::fmt::Debug) -> String {
+    format!("{v:?}").to_lowercase()
 }

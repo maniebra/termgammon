@@ -41,6 +41,12 @@ impl Game {
         g
     }
 
+    pub fn new_match(&mut self) {
+        self.score = [0; 2];
+        self.log.clear();
+        self.reset();
+    }
+
     pub(super) fn reset(&mut self) {
         self.board = Board::default();
         self.cube = Cube::default();

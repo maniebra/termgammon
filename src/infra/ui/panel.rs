@@ -22,7 +22,7 @@ pub fn info(g: &Game) -> Vec<Line<'static>> {
 }
 
 pub fn keys() -> Vec<Line<'static>> {
-    ["←/→ move   enter pick/drop   esc cancel", "r roll   d double   y take   p pass", "a level   m mode   n new   q quit"]
+    ["←/→ move   enter pick/drop   esc cancel", "r roll   d double   y take   p pass", "esc / q menu"]
         .map(Line::raw)
         .to_vec()
 }
@@ -33,6 +33,6 @@ fn prompt(g: &Game) -> String {
         Phase::Roll => "Press r to roll".into(),
         Phase::Move => g.msg.clone(),
         Phase::Offer => format!("{:?}: y take / p pass", g.actor()),
-        Phase::Over => "Game over, press n".into(),
+        Phase::Over => "Enter: next game   Esc: menu".into(),
     }
 }

@@ -1,5 +1,5 @@
 use super::names;
-use crate::app::Game;
+use crate::app::App;
 use std::{fs, path::PathBuf};
 
 fn path() -> Option<PathBuf> {
@@ -9,28 +9,28 @@ fn path() -> Option<PathBuf> {
     Some(base.join("termgammon").join("settings"))
 }
 
-pub fn load(g: &mut Game) {
+pub fn load(a: &mut App) {
     let text = path().and_then(|p| fs::read_to_string(p).ok()).unwrap_or_default();
-    apply(g, text.lines().filter_map(|l| l.split_once('=')));
+    apply(a, text.lines().filter_map(|l| l.split_once('=')));
 }
 
-pub fn args(g: &mut Game, args: &[String]) {
-    apply(g, args.chunks(2).filter_map(|c| Some((c[0].strip_prefix("--")?, c.get(1)?.as_str()))));
+pub fn args(a: &mut App, args: &[String]) {
+    apply(a, args.chunks(2).filter_map(|c| Some((c[0].strip_prefix("--")?, c.get(1)?.as_str()))));
 }
 
-fn apply<'a>(g: &mut Game, pairs: impl Iterator<Item = (&'a str, &'a str)>) {
+fn apply<'a>(a: &mut App, pairs: impl Iterator<Item = (&'a str, &'a str)>) {
     for (key, value) in pairs {
         match key {
-            "level" => g.level = names::level(value).unwrap_or(g.level),
-            "ai" => g.set_ai(names::ai(value).unwrap_or(g.ai)),
+            "level" => a.game.level = names::level(value).unwrap_or(a.game.level),
+            "side" => a.side = names::side(value).unwrap_or(a.side),
             _ => {}
         }
     }
 }
 
-pub fn save(g: &Game) {
+pub fn save(a: &App) {
     let Some(p) = path() else { return };
-    let text = format!("level={}\nai={}\n", format!("{:?}", g.level).to_lowercase(), names::ai_name(g.ai));
+    let text = format!("level={}\nside={}\n", names::lower(a.game.level), names::lower(a.side));
     let _ = p.parent().map(fs::create_dir_all);
     let _ = fs::write(p, text);
 }
