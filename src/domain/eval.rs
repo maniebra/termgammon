@@ -1,7 +1,7 @@
 use super::{Board, Player};
 
 impl Board {
-    fn pips(&self, p: Player) -> i32 {
+    pub fn pips(&self, p: Player) -> i32 {
         let dist = |i: usize| if p == Player::White { i + 1 } else { 24 - i } as i32;
         let on_board: i32 = (0..24).map(|i| self.count(p, i) as i32 * dist(i)).sum();
         on_board + 25 * self.bar[p.idx()] as i32

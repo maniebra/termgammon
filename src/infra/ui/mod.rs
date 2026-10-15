@@ -4,6 +4,7 @@ mod dice;
 mod help;
 mod menu;
 mod panel;
+mod race;
 mod style;
 mod table;
 
