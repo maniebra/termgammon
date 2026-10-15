@@ -25,7 +25,7 @@ impl Game {
                     self.msg = format!("Black rolled {:?}:", self.dice);
                 }
             } else if self.turn == Player::Black {
-                let m = ai::best(&self.board, self.turn, &self.dice, ai::Level::Medium, &mut self.rng).unwrap();
+                let m = ai::best(&self.board, self.turn, &self.dice, self.level, &mut self.rng).unwrap();
                 self.msg += &format!(" {}-{}", pos(m.from, "bar"), pos(m.to, "off"));
                 self.play(m);
             } else {

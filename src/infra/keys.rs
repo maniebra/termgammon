@@ -7,6 +7,7 @@ pub fn action(key: KeyCode) -> Option<Action> {
         KeyCode::Right | KeyCode::Char('l') => Some(Action::Right),
         KeyCode::Enter | KeyCode::Char(' ') => Some(Action::Enter),
         KeyCode::Esc => Some(Action::Cancel),
+        KeyCode::Char('a') => Some(Action::CycleLevel),
         _ => None,
     }
 }

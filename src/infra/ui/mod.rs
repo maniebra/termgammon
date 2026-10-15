@@ -26,9 +26,9 @@ pub fn draw(f: &mut Frame, g: &Game) {
         Line::raw(""),
         Line::from(Span::styled(off, style::of(g, OFF, &targets, Color::Reset))),
         Line::raw(""),
-        Line::raw(format!(" Turn: {:?}   Dice: {:?}", g.turn, g.dice)),
+        Line::raw(format!(" Turn: {:?}   Dice: {:?}   AI: {:?}", g.turn, g.dice, g.level)),
         Line::raw(format!(" {}", g.msg)),
-        Line::raw(" ←/→ move  Enter select/drop  Esc cancel  q quit"),
+        Line::raw(" ←/→ move  Enter select/drop  Esc cancel  a ai level  q quit"),
     ];
     let block = Block::bordered().title(" termgammon ");
     f.render_widget(Paragraph::new(lines).block(block), f.area());

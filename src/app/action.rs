@@ -3,4 +3,5 @@ pub enum Action {
     Right,
     Enter,
     Cancel,
+    CycleLevel,
 }

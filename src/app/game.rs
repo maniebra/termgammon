@@ -1,5 +1,5 @@
 use super::Action;
-use crate::domain::{Board, Move, Player};
+use crate::domain::{Board, Move, Player, ai::Level};
 use crate::shared::Rng;
 
 pub const OFF: usize = 24;
@@ -11,6 +11,7 @@ pub struct Game {
     pub cursor: usize,
     pub selected: Option<Option<usize>>,
     pub msg: String,
+    pub level: Level,
     pub(super) rng: Rng,
 }
 
@@ -23,6 +24,7 @@ impl Game {
             cursor: 0,
             selected: None,
             msg: String::new(),
+            level: Level::Medium,
             rng: Rng::new(),
         };
         g.roll();
@@ -43,6 +45,7 @@ impl Game {
             Action::Left => self.cursor = (self.cursor + OFF) % (OFF + 1),
             Action::Right => self.cursor = (self.cursor + 1) % (OFF + 1),
             Action::Cancel => self.selected = None,
+            Action::CycleLevel => self.level = self.level.next(),
             Action::Enter => self.enter(),
         }
     }
