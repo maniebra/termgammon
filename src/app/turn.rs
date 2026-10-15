@@ -5,10 +5,12 @@ const ROLL_FRAMES: u8 = 8;
 
 impl Game {
     pub(super) fn play(&mut self, m: Move) {
+        let bar = self.board.bar[self.turn.other().idx()];
         self.board.apply(self.turn, m);
         self.last.push(m);
         self.dice = without(&self.dice, m.die);
-        self.note(&format!(" {}-{}", pos(m.from, "bar"), pos(m.to, "off")));
+        let hit = if self.board.bar[self.turn.other().idx()] > bar { "*" } else { "" };
+        self.note(&format!(" {}/{}{hit}", pos(m.from, "bar"), pos(m.to, "off")));
     }
 
     pub(super) fn roll(&mut self) {
@@ -16,7 +18,7 @@ impl Game {
         self.dice = if a == b { vec![a; 4] } else { vec![a, b] };
         self.show(a, b);
         self.phase = Phase::Move;
-        self.log.push(format!("{:?} rolled {:?}:", self.turn, self.dice));
+        self.log.push(format!("{:?} {a}-{b}:", self.turn));
     }
 
     pub(super) fn opening(&mut self) {
@@ -30,7 +32,7 @@ impl Game {
         self.dice = vec![w, b];
         self.show(w, b);
         self.phase = Phase::Move;
-        self.log.push(format!("Opening roll: White {w}, Black {b}. {:?} starts:", self.turn));
+        self.log.push(format!("Opening W{w} B{b}, {:?}:", self.turn));
     }
 
     pub(super) fn advance(&mut self) {
