@@ -1,12 +1,6 @@
+use super::Action;
 use crate::domain::{Board, Move, Player};
 use crate::shared::Rng;
-
-pub enum Action {
-    Left,
-    Right,
-    Enter,
-    Cancel,
-}
 
 pub const OFF: usize = 24;
 
@@ -17,7 +11,7 @@ pub struct Game {
     pub cursor: usize,
     pub selected: Option<Option<usize>>,
     pub msg: String,
-    rng: Rng,
+    pub(super) rng: Rng,
 }
 
 impl Game {
@@ -53,7 +47,7 @@ impl Game {
         }
     }
 
-    fn legal(&self) -> Vec<Move> {
+    pub(super) fn legal(&self) -> Vec<Move> {
         self.board.legal_moves(self.turn, &self.dice)
     }
 
@@ -73,35 +67,12 @@ impl Game {
         };
         self.selected = None;
         match legal.into_iter().find(|m| m.from == from && m.to == at) {
-            Some(m) => self.play(m),
-            None => self.msg = "Illegal move".into(),
-        }
-    }
-
-    fn play(&mut self, m: Move) {
-        self.msg.clear();
-        self.board.apply(self.turn, m);
-        let i = self.dice.iter().position(|&d| d == m.die).unwrap();
-        self.dice.remove(i);
-        self.advance();
-    }
-
-    fn roll(&mut self) {
-        let (a, b) = (self.rng.die(), self.rng.die());
-        self.dice = if a == b { vec![a; 4] } else { vec![a, b] };
-    }
-
-    fn advance(&mut self) {
-        if let Some(p) = self.board.winner() {
-            self.msg = format!("{p:?} wins! Press q to quit");
-            return;
-        }
-        while self.legal().is_empty() {
-            if !self.dice.is_empty() {
-                self.msg = format!("{:?} rolled {:?}, no moves", self.turn, self.dice);
+            Some(m) => {
+                self.msg.clear();
+                self.play(m);
+                self.advance();
             }
-            self.turn = self.turn.other();
-            self.roll();
+            None => self.msg = "Illegal move".into(),
         }
     }
 }
