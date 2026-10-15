@@ -9,6 +9,7 @@ pub struct Game {
     pub cube: Cube,
     pub phase: Phase,
     pub score: [u32; 2],
+    pub target: u32,
     pub turn: Player,
     pub dice: Vec<u8>,
     pub rolled: Vec<u8>,
@@ -33,6 +34,7 @@ impl Game {
             cube: Cube::default(),
             phase: Phase::Roll,
             score: [0; 2],
+            target: 3,
             turn: Player::White,
             dice: vec![],
             rolled: vec![],
@@ -64,6 +66,10 @@ impl Game {
         self.cube = Cube::default();
         self.selected = None;
         self.opening();
+    }
+
+    pub fn match_winner(&self) -> Option<Player> {
+        [Player::White, Player::Black].into_iter().find(|p| self.score[p.idx()] >= self.target)
     }
 
     pub fn targets(&self) -> Vec<Option<usize>> {

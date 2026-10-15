@@ -13,7 +13,7 @@ pub fn info(g: &Game) -> Vec<Line<'static>> {
     lines.extend(super::dice::art(g));
     lines.extend([
         Line::raw(format!("Cube   {} ({owner})", g.cube.value)),
-        Line::raw(format!("Score  White {}  Black {}", g.score[0], g.score[1])),
+        Line::raw(format!("Score  White {}  Black {}  (to {})", g.score[0], g.score[1], g.target)),
         Line::raw(format!("Mode   {mode}")),
         Line::raw(""),
         Line::styled(prompt(g), Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD)),

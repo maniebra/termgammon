@@ -4,24 +4,33 @@ use super::Screen;
 pub enum Item {
     VsAi,
     Hotseat,
+    Start,
     Resume,
     NewGame,
+    Rematch,
     Settings,
     Help,
     MainMenu,
     Quit,
     Level,
     Side,
+    Length,
+    Yes,
+    No,
     Back,
 }
 
-pub fn items(s: Screen) -> &'static [Item] {
+pub fn items(s: Screen, vs_ai: bool) -> &'static [Item] {
     use Item::*;
     match s {
         Screen::Main => &[VsAi, Hotseat, Settings, Help, Quit],
+        Screen::Setup if vs_ai => &[Level, Side, Length, Start, Back],
+        Screen::Setup => &[Length, Start, Back],
         Screen::Pause => &[Resume, NewGame, Settings, Help, MainMenu, Quit],
-        Screen::Settings => &[Level, Side, Back],
+        Screen::Settings => &[Level, Side, Length, Back],
         Screen::Help => &[Back],
+        Screen::Confirm(_) => &[No, Yes],
+        Screen::MatchOver => &[Rematch, MainMenu],
         Screen::Playing => &[],
     }
 }

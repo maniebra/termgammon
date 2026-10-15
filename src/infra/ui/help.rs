@@ -1,3 +1,5 @@
+use super::style;
+use crate::app::Game;
 use ratatui::{
     style::{Color, Style},
     text::Line,
@@ -6,6 +8,15 @@ use ratatui::{
 pub fn banner() -> Vec<Line<'static>> {
     let style = Style::default().fg(Color::LightRed);
     ["●  ○  ●  ○  ●  ○", "  t e r m g a m m o n", "○  ●  ○  ●  ○  ●"].map(|s| Line::styled(s, style)).to_vec()
+}
+
+pub fn result(g: &Game) -> Vec<Line<'static>> {
+    let w = g.match_winner().unwrap_or(g.turn);
+    let style = Style::default().fg(style::player(w));
+    vec![
+        Line::styled(format!("★ {w:?} wins the match"), style),
+        Line::raw(format!("White {}  ·  Black {}", g.score[0], g.score[1])),
+    ]
 }
 
 pub fn rules() -> Vec<Line<'static>> {

@@ -38,6 +38,11 @@ fn label(app: &App, item: Item) -> String {
         Item::Quit => "Quit".into(),
         Item::Level => format!("AI level  ◀ {:?} ▶", app.game.level),
         Item::Side => format!("AI plays  ◀ {:?} ▶", app.side),
+        Item::Length => format!("Match to  ◀ {} ▶", app.game.target),
+        Item::Start => "Start".into(),
+        Item::Rematch => "Rematch".into(),
+        Item::Yes => "Yes".into(),
+        Item::No => "No".into(),
         Item::Back => "Back".into(),
     }
 }
