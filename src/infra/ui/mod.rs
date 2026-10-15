@@ -29,7 +29,7 @@ pub fn draw(f: &mut Frame, g: &Game) {
         Line::raw(format!(" Turn: {:?}   Dice: {:?}   AI: {:?} {}", g.turn, g.dice, g.level, mode(g))),
         Line::raw(format!(" {}", g.msg)),
         Line::raw(""),
-        Line::raw(" ←/→ move  Enter select/drop  Esc cancel  a ai level  m mode  q quit"),
+        Line::raw(" ←/→ move  Enter select/drop  Esc cancel  a ai level  m mode  n new  q quit"),
     ];
     let log = g.log.iter().rev().take(4).rev().map(|s| Line::raw(format!(" {s}")));
     let lines: Vec<Line> = lines.into_iter().chain(log).collect();

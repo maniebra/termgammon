@@ -29,7 +29,7 @@ impl Game {
                 return;
             }
         }
-        self.log.push(format!("{:?} wins! Press q to quit", self.board.winner().unwrap()));
+        self.log.push(format!("{:?} wins! Press n for a new game", self.board.winner().unwrap()));
     }
 
     fn note(&mut self, s: &str) {

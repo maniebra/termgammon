@@ -31,9 +31,16 @@ impl Game {
             ai: Some(Player::Black),
             rng: Rng::new(),
         };
-        g.roll();
-        g.advance();
+        g.reset();
         g
+    }
+
+    fn reset(&mut self) {
+        self.board = Board::default();
+        self.turn = Player::White;
+        self.selected = None;
+        self.roll();
+        self.advance();
     }
 
     pub fn targets(&self) -> Vec<Option<usize>> {
@@ -45,6 +52,7 @@ impl Game {
         match a {
             Action::CycleLevel => return self.level = self.level.next(),
             Action::CycleMode => return self.cycle_mode(),
+            Action::NewGame => return self.reset(),
             _ if self.board.winner().is_some() => return,
             _ => {}
         }

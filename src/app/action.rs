@@ -5,4 +5,5 @@ pub enum Action {
     Cancel,
     CycleLevel,
     CycleMode,
+    NewGame,
 }

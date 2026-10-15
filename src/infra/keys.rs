@@ -9,6 +9,7 @@ pub fn action(key: KeyCode) -> Option<Action> {
         KeyCode::Esc => Some(Action::Cancel),
         KeyCode::Char('a') => Some(Action::CycleLevel),
         KeyCode::Char('m') => Some(Action::CycleMode),
+        KeyCode::Char('n') => Some(Action::NewGame),
         _ => None,
     }
 }
