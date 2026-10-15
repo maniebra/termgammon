@@ -1,14 +1,17 @@
 use crate::app::Game;
 use ratatui::{
     Frame,
-    layout::{Constraint, Flex, Layout},
+    layout::{Constraint, Flex, Layout, Rect},
     text::Line,
     widgets::{Block, Paragraph},
 };
 
+pub fn columns(area: Rect) -> [Rect; 2] {
+    Layout::horizontal([Constraint::Length(50), Constraint::Length(46)]).flex(Flex::Center).areas(area)
+}
+
 pub fn draw(f: &mut Frame, g: &Game) {
-    let [left, right] =
-        Layout::horizontal([Constraint::Length(50), Constraint::Length(46)]).flex(Flex::Center).areas(f.area());
+    let [left, right] = columns(f.area());
     let [board, race, log] =
         Layout::vertical([Constraint::Length(15), Constraint::Length(4), Constraint::Min(3)]).areas(left);
     let [info, keys, _] =

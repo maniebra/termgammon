@@ -8,6 +8,8 @@ mod race;
 mod style;
 mod table;
 
+pub use table::columns;
+
 use crate::app::{App, Ask, Screen};
 use ratatui::text::Line;
 use ratatui::Frame;

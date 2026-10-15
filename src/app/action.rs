@@ -13,4 +13,5 @@ pub enum Action {
     Pass,
     Undo,
     Next,
+    Click(usize),
 }
