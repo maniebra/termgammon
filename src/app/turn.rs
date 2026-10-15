@@ -51,6 +51,7 @@ impl Game {
             self.note(" no moves");
         }
         self.dice.clear();
+        self.undo.clear();
         self.selected = None;
         self.turn = self.turn.other();
         self.phase = Phase::Roll;

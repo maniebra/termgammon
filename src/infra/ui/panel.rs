@@ -22,7 +22,7 @@ pub fn info(g: &Game) -> Vec<Line<'static>> {
 }
 
 pub fn keys() -> Vec<Line<'static>> {
-    ["←/→ move   enter pick/drop   esc cancel", "r roll   d double   y take   p pass", "esc / q menu"]
+    ["←/→ move   tab next   enter pick/drop", "u undo   r roll   d double   y/p take/pass", "esc / q menu"]
         .map(Line::raw)
         .to_vec()
 }

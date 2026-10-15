@@ -11,4 +11,6 @@ pub enum Action {
     Double,
     Take,
     Pass,
+    Undo,
+    Next,
 }

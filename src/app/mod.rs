@@ -1,4 +1,5 @@
 mod action;
+mod assist;
 mod doubling;
 mod game;
 mod input;

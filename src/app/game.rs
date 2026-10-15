@@ -22,6 +22,7 @@ pub struct Game {
     pub ai: Option<Player>,
     pub ticks: u32,
     pub(super) wait: u8,
+    pub(super) undo: Vec<(Board, Vec<u8>, Option<String>)>,
     pub(super) rng: Rng,
 }
 
@@ -45,6 +46,7 @@ impl Game {
             ai: Some(Player::Black),
             ticks: 0,
             wait: 0,
+            undo: vec![],
             rng: Rng::new(),
         };
         g.reset();

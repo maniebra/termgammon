@@ -19,6 +19,8 @@ impl Game {
             (Action::Right, Phase::Move) => self.cursor = (self.cursor + 1) % (OFF + 1),
             (Action::Cancel, Phase::Move) => self.selected = None,
             (Action::Enter, Phase::Move) => self.enter(),
+            (Action::Undo, Phase::Move) => self.undo(),
+            (Action::Next, Phase::Move) => self.next(),
             (Action::Enter, Phase::Over) => self.reset(),
             _ => {}
         }
@@ -44,6 +46,7 @@ impl Game {
         match legal.into_iter().find(|m| m.from == from && m.to == at) {
             Some(m) => {
                 self.msg.clear();
+                self.snapshot();
                 self.play(m);
                 self.advance();
             }
