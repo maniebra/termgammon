@@ -6,6 +6,7 @@ const ROLL_FRAMES: u8 = 8;
 impl Game {
     pub(super) fn play(&mut self, m: Move) {
         self.board.apply(self.turn, m);
+        self.last.push(m);
         self.dice = without(&self.dice, m.die);
         self.note(&format!(" {}-{}", pos(m.from, "bar"), pos(m.to, "off")));
     }
@@ -57,6 +58,7 @@ impl Game {
 
     fn show(&mut self, a: u8, b: u8) {
         self.rolled = vec![a, b];
+        self.last.clear();
         self.anim = ROLL_FRAMES;
     }
 
