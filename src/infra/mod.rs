@@ -5,6 +5,7 @@ mod ui;
 
 use crate::app::App;
 use ratatui::crossterm::event::{self, Event, KeyEventKind};
+use std::time::Duration;
 
 pub fn run() -> std::io::Result<()> {
     let mut term = ratatui::init();
@@ -18,11 +19,16 @@ pub fn run() -> std::io::Result<()> {
         if let Err(e) = term.draw(|f| ui::draw(f, &app)) {
             break Err(e);
         }
-        match event::read() {
-            Ok(Event::Key(k)) if k.kind == KeyEventKind::Press => keys::action(k.code).map(|a| app.handle(a)),
-            Ok(_) => None,
+        match event::poll(Duration::from_millis(50)).and_then(|ready| ready.then(event::read).transpose()) {
+            Ok(Some(Event::Key(k))) if k.kind == KeyEventKind::Press => {
+                if let Some(a) = keys::action(k.code) {
+                    app.handle(a);
+                }
+            }
+            Ok(None) => app.tick(),
+            Ok(_) => {}
             Err(e) => break Err(e),
-        };
+        }
     };
     ratatui::restore();
     settings::save(&app);

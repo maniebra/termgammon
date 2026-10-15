@@ -1,5 +1,5 @@
 use super::{Game, Phase};
-use crate::domain::{Move, ai, without};
+use crate::domain::{Move, without};
 
 impl Game {
     pub(super) fn play(&mut self, m: Move) {
@@ -17,21 +17,12 @@ impl Game {
 
     pub(super) fn advance(&mut self) {
         loop {
-            let ai = self.ai == Some(self.turn);
             match self.phase {
                 Phase::Move if self.board.winner().is_some() => {
                     let w = self.board.winner().unwrap();
                     return self.finish(w, self.cube.value * self.board.multiplier(w));
                 }
                 Phase::Move if self.legal().is_empty() => self.end_turn(),
-                Phase::Move if ai => {
-                    let m = ai::best(&self.board, self.turn, &self.dice, self.level, &mut self.rng).unwrap();
-                    self.play(m);
-                }
-                Phase::Roll if ai && self.cube.can_double(self.turn) && ai::wants_double(&self.board, self.turn) => {
-                    self.offer()
-                }
-                Phase::Roll if ai => self.roll(),
                 _ => return,
             }
         }

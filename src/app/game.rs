@@ -17,6 +17,8 @@ pub struct Game {
     pub log: Vec<String>,
     pub level: Level,
     pub ai: Option<Player>,
+    pub ticks: u32,
+    pub(super) wait: u8,
     pub(super) rng: Rng,
 }
 
@@ -35,6 +37,8 @@ impl Game {
             log: vec![],
             level: Level::Medium,
             ai: Some(Player::Black),
+            ticks: 0,
+            wait: 0,
             rng: Rng::new(),
         };
         g.reset();

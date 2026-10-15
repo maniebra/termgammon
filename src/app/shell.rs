@@ -34,6 +34,12 @@ impl App {
         }
     }
 
+    pub fn tick(&mut self) {
+        if self.screen == Screen::Playing {
+            self.game.tick();
+        }
+    }
+
     fn pick(&mut self, item: Item) {
         match item {
             Item::VsAi => self.start(Some(self.side)),

@@ -31,8 +31,11 @@ fn prompt(g: &Game) -> String {
     match g.phase {
         Phase::Roll if g.cube.can_double(g.turn) => "Press r to roll or d to double".into(),
         Phase::Roll => "Press r to roll".into(),
+        _ if g.thinking() => format!("{:?} is thinking {}", g.turn, SPIN[g.ticks as usize / 2 % SPIN.len()]),
         Phase::Move => g.msg.clone(),
         Phase::Offer => format!("{:?}: y take / p pass", g.actor()),
         Phase::Over => "Enter: next game   Esc: menu".into(),
     }
 }
+
+const SPIN: [&str; 4] = ["◐", "◓", "◑", "◒"];

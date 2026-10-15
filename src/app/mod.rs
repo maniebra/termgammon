@@ -3,6 +3,7 @@ mod doubling;
 mod game;
 mod input;
 mod menu;
+mod pace;
 mod phase;
 mod screen;
 mod shell;
