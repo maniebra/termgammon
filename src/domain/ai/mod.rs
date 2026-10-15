@@ -33,4 +33,23 @@ mod tests {
             assert_eq!(m.to, Some(1));
         }
     }
+
+    #[test]
+    fn plays_full_game() {
+        let (mut b, mut p, mut rng) = (Board::default(), Player::White, Rng::new());
+        for _ in 0..1000 {
+            let (x, y) = (rng.die(), rng.die());
+            let mut dice = if x == y { vec![x; 4] } else { vec![x, y] };
+            let level = if p == Player::White { Level::Hard } else { Level::Medium };
+            while let Some(m) = best(&b, p, &dice, level, &mut rng) {
+                b.apply(p, m);
+                dice = crate::domain::without(&dice, m.die);
+            }
+            if b.winner().is_some() {
+                return;
+            }
+            p = p.other();
+        }
+        panic!("game never ended");
+    }
 }
