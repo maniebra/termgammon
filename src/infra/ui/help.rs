@@ -27,7 +27,8 @@ pub fn rules() -> Vec<Line<'static>> {
         "Checkers on the bar must re-enter before anything else.",
         "",
         "r roll   d double   y take   p pass",
-        "←/→ move cursor   enter pick / drop   esc menu",
+        "←/→ or tab move cursor   enter or click pick / drop",
+        "u undo   esc menu",
         "",
         "Gammon (loser bore off none) scores 2×, backgammon 3×.",
     ]
