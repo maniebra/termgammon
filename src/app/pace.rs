@@ -1,11 +1,10 @@
 use super::{Game, Phase};
 use crate::domain::ai;
 
-const AI_DELAY: u8 = 8;
+const AI_DELAY: u8 = 18;
 
 impl Game {
     pub fn tick(&mut self) {
-        self.ticks = self.ticks.wrapping_add(1);
         if self.anim > 0 {
             self.anim -= 1;
             return;

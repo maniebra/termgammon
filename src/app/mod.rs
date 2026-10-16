@@ -3,6 +3,7 @@ mod assist;
 mod cursor;
 mod doubling;
 mod flow;
+mod fx;
 mod game;
 mod input;
 mod menu;
@@ -13,6 +14,7 @@ mod shell;
 mod turn;
 
 pub use action::Action;
+pub use fx::{Effect, Fx, SLIDE};
 pub use game::{Game, OFF};
 pub use menu::Item;
 pub use phase::Phase;

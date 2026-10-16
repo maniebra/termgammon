@@ -1,10 +1,11 @@
-use super::{Game, Phase};
+use super::{Fx, Game, Phase};
 use crate::domain::{Player, ai};
 
 impl Game {
     pub(super) fn offer(&mut self) {
         let taker = self.turn.other();
         self.log.push(format!("{:?} doubles to {}", self.turn, self.cube.value * 2));
+        self.fx(Fx::Toast(format!("DOUBLE ×{}", self.cube.value * 2)));
         match self.ai == Some(taker) {
             true if ai::takes(&self.board, taker) => self.accept(),
             true => self.decline(),
@@ -26,6 +27,7 @@ impl Game {
     pub(super) fn finish(&mut self, winner: Player, points: u32) {
         self.score[winner.idx()] += points;
         self.phase = Phase::Over;
+        self.fx(Fx::Confetti);
         self.log.push(format!("{winner:?} wins {points} point(s). Enter for next game"));
     }
 }

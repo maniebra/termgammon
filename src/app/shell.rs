@@ -8,6 +8,7 @@ pub struct App {
     pub side: Player,
     pub vs_ai: bool,
     pub quit: bool,
+    pub opened: u32,
     pub(super) back: Screen,
 }
 
@@ -15,7 +16,7 @@ impl App {
     pub fn new() -> Self {
         let game = Game::new();
         let (screen, side) = (Screen::Main, Player::Black);
-        Self { game, screen, index: 0, side, vs_ai: true, quit: false, back: screen }
+        Self { game, screen, index: 0, side, vs_ai: true, quit: false, opened: 0, back: screen }
     }
 
     pub fn items(&self) -> &'static [Item] {
@@ -23,6 +24,7 @@ impl App {
     }
 
     pub fn handle(&mut self, a: Action) {
+        let before = self.screen;
         match (self.screen, a) {
             (Screen::Playing, Action::Cancel | Action::Quit) if self.game.selected.is_none() => self.open(Screen::Pause),
             (Screen::Playing, _) => self.game.handle(a),
@@ -35,9 +37,13 @@ impl App {
             _ => {}
         }
         self.sync();
+        if self.screen != before {
+            self.opened = self.game.frame;
+        }
     }
 
     pub fn tick(&mut self) {
+        self.game.animate();
         if self.screen == Screen::Playing {
             self.game.tick();
             self.sync();

@@ -10,7 +10,9 @@ use ratatui::crossterm::{
     execute,
 };
 use std::io::stdout;
-use std::time::Duration;
+use std::time::{Duration, Instant};
+
+const FRAME: Duration = Duration::from_millis(30);
 
 pub fn run() -> std::io::Result<()> {
     let mut term = ratatui::init();
@@ -18,6 +20,7 @@ pub fn run() -> std::io::Result<()> {
     let mut app = App::new();
     settings::load(&mut app);
     settings::args(&mut app, &std::env::args().skip(1).collect::<Vec<_>>());
+    let mut last = Instant::now();
     let res = loop {
         if app.quit {
             break Ok(());
@@ -25,7 +28,11 @@ pub fn run() -> std::io::Result<()> {
         if let Err(e) = term.draw(|f| ui::draw(f, &app)) {
             break Err(e);
         }
-        match event::poll(Duration::from_millis(50)).and_then(|ready| ready.then(event::read).transpose()) {
+        if last.elapsed() >= FRAME {
+            last = Instant::now();
+            app.tick();
+        }
+        match event::poll(FRAME.saturating_sub(last.elapsed())).and_then(|ready| ready.then(event::read).transpose()) {
             Ok(Some(Event::Key(k))) if k.kind == KeyEventKind::Press => {
                 if let Some(a) = keys::action(k.code) {
                     app.handle(a);
@@ -36,7 +43,6 @@ pub fn run() -> std::io::Result<()> {
                     app.handle(a);
                 }
             }
-            Ok(None) => app.tick(),
             Ok(_) => {}
             Err(e) => break Err(e),
         }

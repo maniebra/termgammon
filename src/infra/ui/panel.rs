@@ -31,7 +31,7 @@ fn prompt(g: &Game) -> String {
     match g.phase {
         Phase::Roll if g.cube.can_double(g.turn) => "Press r to roll or d to double".into(),
         Phase::Roll => "Press r to roll".into(),
-        _ if g.thinking() => format!("{:?} is thinking {}", g.turn, SPIN[g.ticks as usize / 2 % SPIN.len()]),
+        _ if g.thinking() => format!("{:?} is thinking {}", g.turn, SPIN[g.frame as usize / 3 % SPIN.len()]),
         Phase::Move if !g.msg.is_empty() => g.msg.clone(),
         Phase::Move if g.source().is_some() => "Move to a green spot (enter / click)".into(),
         Phase::Move => "Pick a checker to move".into(),

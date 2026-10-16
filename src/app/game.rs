@@ -21,7 +21,8 @@ pub struct Game {
     pub log: Vec<String>,
     pub level: Level,
     pub ai: Option<Player>,
-    pub ticks: u32,
+    pub frame: u32,
+    pub effects: Vec<super::Effect>,
     pub(super) wait: u8,
     pub(super) undo: Vec<(Board, Vec<u8>, Option<String>)>,
     pub(super) rng: Rng,
@@ -46,7 +47,8 @@ impl Game {
             log: vec![],
             level: Level::Medium,
             ai: Some(Player::Black),
-            ticks: 0,
+            frame: 0,
+            effects: vec![],
             wait: 0,
             undo: vec![],
             rng: Rng::new(),
@@ -66,6 +68,7 @@ impl Game {
         self.cube = Cube::default();
         self.selected = None;
         self.opening();
+        self.advance();
     }
 
     pub fn match_winner(&self) -> Option<Player> {
