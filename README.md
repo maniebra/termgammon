@@ -1,70 +1,88 @@
-# termgammon
+<div align="center">
 
-Backgammon in the terminal, built with [ratatui](https://ratatui.rs).
+# 🎲 termgammon
 
-## Features
+### The oldest game in the world. In the coolest place on your computer.
 
-- Full rules: hitting, the bar, bearing off, and the rule that you must use as many dice as possible
-- Play against an AI (easy, medium, hard) or against a friend on the same keyboard
-- Doubling cube, gammons and backgammons, and matches to 1, 3, 5, 7 or 9 points
-- Animated dice, highlighted last move, pip-count race gauges and a move log
-- Undo within a turn, keyboard and mouse controls
-- Themes: classic, ocean, neon, forest, mono and basic (16 colors, for terminals without truecolor)
+**Backgammon, beautifully rebuilt for the terminal.**
+No browser. No ads. No account. Just you, the dice, and a worthy opponent.
 
-## Install
+![MIT](https://img.shields.io/badge/license-MIT-blue) ![Rust](https://img.shields.io/badge/built%20with-Rust-orange) ![Platforms](https://img.shields.io/badge/linux%20%7C%20macOS%20%7C%20windows-supported-brightgreen)
 
-Prebuilt binaries for Linux, macOS and Windows are attached to each release.
+</div>
 
-From source (needs a Rust toolchain):
-
-```sh
-make install     # cargo install --path . --locked
-make uninstall
+```
+┌ termgammon ────────────────────────────────────┐┌ game ─────────────────────┐
+│13 14 15 16 17 18  ┃ 19 20 21 22 23 24  ┃ off   ││Turn   ● White             │
+│ ●           ●     ┃  ●              ●  ┃  0    ││╭───────╮ ╭───────╮        │
+│ ●           ●     ┃  ●              ●  ┃       │││ ●   ● │ │ ●     │        │
+│ ●           ●     ┃  ●                 ┃       │││ ●   ● │ │   ●   │        │
+│ ●                 ┃  ●                 ┃       │││ ●   ● │ │     ● │        │
+│ ●                 ┃  ●                 ┃       ││╰───────╯ ╰───────╯        │
+│                  BAR                           ││Cube   2 (White)           │
+│ ●                 ┃  ●                 ┃       ││Score  White 2  Black 1    │
+│ ●                 ┃  ●                 ┃       ││                           │
+│ ●           ●     ┃  ●                 ┃       ││Move to a green spot       │
+│ ●           ●     ┃  ●              ●  ┃       │└───────────────────────────┘
+│ ●           ●     ┃  ●              ●  ┃  0    │
+│12 11 10  9  8  7  ┃  6  5  4  3  2  1  ┃ off   │
+└────────────────────────────────────────────────┘
 ```
 
-## Usage
+## Why you'll love it
+
+🔥 **It looks incredible.** Checkers fly across the board in smooth arcs. Hits explode in sparks. Dice tumble. Win a match and the whole screen rains confetti. Yes, in a terminal.
+
+🧠 **An AI that fights back.** Warm up on Easy, get humbled on Hard. Hard looks ahead through every way to play your roll, and it knows when to double you.
+
+🎯 **The real game, all of it.** Hitting, the bar, bearing off, the doubling cube, gammons, backgammons, and full matches to 1, 3, 5, 7 or 9 points.
+
+🎨 **Make it yours.** Six themes: Classic, Ocean, Neon, Forest, Mono and Basic. One of them is going to match your setup perfectly.
+
+🖱️ **Plays the way you think.** Click a checker, click where it goes. Or fly around with the keyboard. Legal moves glow green, and a wrong move is one keypress to undo.
+
+👥 **Bring a friend.** Hotseat mode for two players on one keyboard. Settle it once and for all.
+
+⚡ **Instant.** Starts in a blink, runs anywhere, fits on small screens too.
+
+## Get it in 10 seconds
+
+**Download** a ready-to-run build for Linux, macOS or Windows from the [Releases](../../releases) page.
+
+**Or build it yourself:**
 
 ```sh
-termgammon [--level easy|medium|hard] [--side black|white] [--length N] [--theme NAME]
+make install
+termgammon
 ```
 
-Theme, level, AI side and match length are saved on quit to
-`$XDG_CONFIG_HOME/termgammon/settings` (or `~/.config/termgammon/settings`).
-Command-line flags override saved values.
+## How to play
 
-## Controls
+Pick a checker, pick a green spot. That's it. Everything else you'll pick up as you go.
 
-| Key | Action |
+| | |
 | --- | --- |
-| arrows | move the cursor (↑/↓ switch rows) |
-| tab | jump to the next playable spot |
-| enter / click | pick a checker, then a green spot |
-| u | undo a move |
-| r | roll |
-| d | offer a double |
-| y / p | take / pass a double |
-| esc / q | menu |
+| **click** or **enter** | pick up / drop a checker |
+| **arrows** · **tab** | move around · jump to the next playable checker |
+| **r** · **d** | roll · double the stakes |
+| **y** · **p** | take · pass a double |
+| **u** | undo |
+| **esc** | menu |
 
-## Development
+New to backgammon? Open **How to play** from the main menu for the rules in thirty seconds.
+
+## For tinkerers
 
 ```sh
-make test
-make build
+termgammon --level hard --side white --length 5 --theme neon
 ```
 
-The code follows a small DDD layout:
+Your choices are remembered between sessions. Contributions are welcome: `make test` and you're off.
 
-- `src/domain` – board, rules, cube, scoring and AI
-- `src/app` – game flow, menus and input handling
-- `src/infra` – terminal, keys, mouse, settings and rendering
-- `src/shared` – dice randomness
+<div align="center">
 
-## Releasing
+**Roll the dice. ⚀ ⚁ ⚂ ⚃ ⚄ ⚅**
 
-Publish a GitHub release with a tag like `v1.2.3`. The release workflow writes that
-version into `Cargo.toml` before building, so the version in the repo never needs
-bumping by hand (it stays `0.0.0-dev`).
+MIT licensed · made with ♥ and Rust
 
-## License
-
-[MIT](LICENSE)
+</div>
