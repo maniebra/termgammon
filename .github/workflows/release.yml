@@ -20,8 +20,12 @@ jobs:
         include:
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-22.04
+            linux: true
           - target: aarch64-unknown-linux-gnu
             os: ubuntu-22.04-arm
+            linux: true
+          - target: x86_64-apple-darwin
+            os: macos-13
           - target: aarch64-apple-darwin
             os: macos-14
           - target: x86_64-pc-windows-msvc
@@ -32,9 +36,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Toolchain
-        run: rustup target add ${{ matrix.target }}
-
       - name: Version from tag
         shell: bash
         run: |
@@ -42,6 +43,9 @@ jobs:
           version="${GITHUB_REF_NAME#v}"
           perl -0pi -e "s/^version = \"[^\"]*\"/version = \"$version\"/m" Cargo.toml
           perl -0pi -e "s/(name = \"termgammon\"\nversion = )\"[^\"]*\"/\$1\"$version\"/" Cargo.lock
+
+      - name: Toolchain
+        run: rustup target add ${{ matrix.target }}
 
       - name: Build
         run: cargo build --release --locked --target ${{ matrix.target }}
@@ -55,11 +59,75 @@ jobs:
           if [[ "${{ matrix.target }}" == *windows* ]]; then
             cp "target/${{ matrix.target }}/release/termgammon.exe" "dist/$name.exe"
           else
-            tar czf "dist/$name.tar.gz" -C "target/${{ matrix.target }}/release" termgammon
+            mkdir -p "stage/$name"
+            cp "target/${{ matrix.target }}/release/termgammon" README.md LICENSE "stage/$name/"
+            tar czf "dist/$name.tar.gz" -C stage "$name"
           fi
+
+      - name: Debian package
+        if: matrix.linux
+        run: |
+          set -euo pipefail
+          cargo install cargo-deb --locked
+          cargo deb --no-build --target ${{ matrix.target }} --output dist/
+          for f in dist/*.deb; do mv "$f" "dist/termgammon-${GITHUB_REF_NAME}-${{ matrix.target }}.deb"; done
+
+      - name: RPM package
+        if: matrix.linux
+        run: |
+          set -euo pipefail
+          cargo install cargo-generate-rpm --locked
+          cargo generate-rpm --target ${{ matrix.target }} -o "dist/termgammon-${GITHUB_REF_NAME}-${{ matrix.target }}.rpm"
+
+      - name: AppImage
+        if: matrix.linux
+        run: |
+          set -euo pipefail
+          arch=$(uname -m)
+          root="stage/AppDir"
+          mkdir -p "$root/usr/bin"
+          cp "target/${{ matrix.target }}/release/termgammon" "$root/usr/bin/"
+          cat > "$root/termgammon.desktop" <<'DESKTOP'
+          [Desktop Entry]
+          Type=Application
+          Name=termgammon
+          Comment=Backgammon in the terminal
+          Exec=termgammon
+          Icon=termgammon
+          Categories=Game;BoardGame;
+          Terminal=true
+          DESKTOP
+          cat > "$root/termgammon.svg" <<'ICON'
+          <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256">
+            <rect width="256" height="256" rx="32" fill="#2b1d14"/>
+            <path d="M32 32l32 96 32-96zM96 32l32 96 32-96zM160 32l32 96 32-96z" fill="#c8873a"/>
+            <circle cx="96" cy="184" r="28" fill="#f2f2f2"/>
+            <circle cx="160" cy="184" r="28" fill="#e05252"/>
+          </svg>
+          ICON
+          ln -s usr/bin/termgammon "$root/AppRun"
+          curl -fsSL -o appimagetool \
+            "https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-${arch}.AppImage"
+          chmod +x appimagetool
+          ./appimagetool --appimage-extract-and-run "$root" "dist/termgammon-${GITHUB_REF_NAME}-${arch}.AppImage"
 
       - name: Upload to the release
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh release upload "$GITHUB_REF_NAME" dist/* --clobber
+
+  crates:
+    runs-on: ubuntu-22.04
+    env:
+      CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publish to crates.io
+        if: env.CARGO_REGISTRY_TOKEN != ''
+        run: |
+          set -euo pipefail
+          version="${GITHUB_REF_NAME#v}"
+          perl -0pi -e "s/^version = \"[^\"]*\"/version = \"$version\"/m" Cargo.toml
+          perl -0pi -e "s/(name = \"termgammon\"\nversion = )\"[^\"]*\"/\$1\"$version\"/" Cargo.lock
+          cargo publish --locked --allow-dirty
