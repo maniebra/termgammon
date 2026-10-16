@@ -43,7 +43,7 @@ impl Game {
                     return self.finish(w, self.cube.value * self.board.multiplier(w));
                 }
                 Phase::Move if self.legal().is_empty() => self.end_turn(),
-                _ => return,
+                _ => return self.aim(),
             }
         }
     }

@@ -1,5 +1,6 @@
 mod action;
 mod assist;
+mod cursor;
 mod doubling;
 mod flow;
 mod game;

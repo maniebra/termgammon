@@ -22,7 +22,7 @@ pub fn info(g: &Game) -> Vec<Line<'static>> {
 }
 
 pub fn keys() -> Vec<Line<'static>> {
-    ["←/→ move   tab next   enter pick/drop", "u undo   r roll   d double   y/p take/pass", "esc / q menu"]
+    ["arrows move   tab next   enter pick/drop", "u undo   r roll   d double   y/p take/pass", "esc / q menu"]
         .map(Line::raw)
         .to_vec()
 }
@@ -32,7 +32,9 @@ fn prompt(g: &Game) -> String {
         Phase::Roll if g.cube.can_double(g.turn) => "Press r to roll or d to double".into(),
         Phase::Roll => "Press r to roll".into(),
         _ if g.thinking() => format!("{:?} is thinking {}", g.turn, SPIN[g.ticks as usize / 2 % SPIN.len()]),
-        Phase::Move => g.msg.clone(),
+        Phase::Move if !g.msg.is_empty() => g.msg.clone(),
+        Phase::Move if g.source().is_some() => "Move to a green spot (enter / click)".into(),
+        Phase::Move => "Pick a checker to move".into(),
         Phase::Offer => format!("{:?}: y take / p pass", g.actor()),
         Phase::Over => "Enter: next game   Esc: menu".into(),
     }

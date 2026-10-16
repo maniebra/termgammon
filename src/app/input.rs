@@ -15,8 +15,9 @@ impl Game {
                 self.advance();
             }
             (Action::Pass, Phase::Offer) => self.decline(),
-            (Action::Left, Phase::Move) => self.cursor = (self.cursor + OFF) % (OFF + 1),
-            (Action::Right, Phase::Move) => self.cursor = (self.cursor + 1) % (OFF + 1),
+            (Action::Left, Phase::Move) => self.step(12, false),
+            (Action::Right, Phase::Move) => self.step(1, false),
+            (Action::Up | Action::Down, Phase::Move) => self.step(0, true),
             (Action::Cancel, Phase::Move) => self.selected = None,
             (Action::Enter, Phase::Move) => self.enter(),
             (Action::Undo, Phase::Move) => self.undo(),
@@ -39,22 +40,23 @@ impl Game {
     fn enter(&mut self) {
         let at = (self.cursor < OFF).then_some(self.cursor);
         let legal = self.legal();
-        let Some(from) = self.source() else {
-            match legal.iter().any(|m| m.from == at) {
-                true => self.selected = Some(at),
-                false => self.msg = "No move from there".into(),
-            }
-            return;
-        };
-        self.selected = None;
-        match legal.into_iter().find(|m| m.from == from && m.to == at) {
-            Some(m) => {
-                self.msg.clear();
+        let movable = legal.iter().any(|m| m.from == at);
+        let chosen = self.source().and_then(|from| legal.into_iter().find(|m| m.from == from && m.to == at));
+        self.msg.clear();
+        match (chosen, self.source()) {
+            (Some(m), _) => {
+                self.selected = None;
                 self.snapshot();
                 self.play(m);
                 self.advance();
             }
-            None => self.msg = "Illegal move".into(),
+            (None, Some(from)) if from == at => self.selected = None,
+            (None, _) if movable && self.board.bar[self.turn.idx()] == 0 => {
+                self.selected = Some(at);
+                self.next();
+            }
+            (None, Some(_)) => self.msg = "Can't move there, pick a green spot".into(),
+            (None, None) => self.msg = "No legal move from that point".into(),
         }
     }
 }

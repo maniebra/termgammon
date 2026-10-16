@@ -85,7 +85,7 @@ impl Game {
         self.board.legal_moves(self.turn, &self.dice)
     }
 
-    pub(super) fn source(&self) -> Option<Option<usize>> {
+    pub fn source(&self) -> Option<Option<usize>> {
         if self.board.bar[self.turn.idx()] > 0 { Some(None) } else { self.selected }
     }
 }

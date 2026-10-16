@@ -1,4 +1,4 @@
-use super::{Game, OFF};
+use super::Game;
 
 impl Game {
     pub(super) fn snapshot(&mut self) {
@@ -13,17 +13,6 @@ impl Game {
         self.selected = None;
         if let (Some(last), Some(line)) = (self.log.last_mut(), line) {
             *last = line;
-        }
-    }
-
-    pub(super) fn next(&mut self) {
-        let spots: Vec<usize> = match self.source() {
-            Some(_) => self.targets().iter().map(|t| t.unwrap_or(OFF)).collect(),
-            None => self.legal().iter().filter_map(|m| m.from).collect(),
-        };
-        let after = |i: &&usize| **i > self.cursor;
-        if let Some(&i) = spots.iter().filter(after).min().or(spots.iter().min()) {
-            self.cursor = i;
         }
     }
 }
