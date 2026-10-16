@@ -10,6 +10,8 @@ pub struct Game {
     pub phase: Phase,
     pub score: [u32; 2],
     pub target: u32,
+    pub crawford: bool,
+    pub(super) crawford_played: bool,
     pub turn: Player,
     pub dice: Vec<u8>,
     pub rolled: Vec<u8>,
@@ -36,6 +38,8 @@ impl Game {
             phase: Phase::Roll,
             score: [0; 2],
             target: 3,
+            crawford: false,
+            crawford_played: false,
             turn: Player::White,
             dice: vec![],
             rolled: vec![],
@@ -59,6 +63,7 @@ impl Game {
 
     pub fn new_match(&mut self) {
         self.score = [0; 2];
+        self.crawford_played = false;
         self.log.clear();
         self.reset();
     }
@@ -67,6 +72,7 @@ impl Game {
         self.board = Board::default();
         self.cube = Cube::default();
         self.selected = None;
+        self.check_crawford();
         self.opening();
         self.advance();
     }

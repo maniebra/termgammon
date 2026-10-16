@@ -17,7 +17,7 @@ impl Game {
             return;
         }
         match self.phase {
-            Phase::Roll if self.cube.can_double(self.turn) && ai::wants_double(&self.board, self.turn) => self.offer(),
+            Phase::Roll if self.may_double() && ai::wants_double(&self.board, self.turn) => self.offer(),
             Phase::Roll => self.roll(),
             _ => {
                 let m = ai::best(&self.board, self.turn, &self.dice, self.level, &mut self.rng).unwrap();

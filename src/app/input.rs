@@ -9,7 +9,7 @@ impl Game {
                 self.roll();
                 self.advance();
             }
-            (Action::Double, Phase::Roll) if self.cube.can_double(self.turn) => self.offer(),
+            (Action::Double, Phase::Roll) if self.may_double() => self.offer(),
             (Action::Take, Phase::Offer) => {
                 self.accept();
                 self.advance();

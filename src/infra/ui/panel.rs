@@ -12,7 +12,7 @@ pub fn info(g: &Game) -> Vec<Line<'static>> {
     let mut lines = vec![Line::from(vec![Span::raw("Turn   "), turn])];
     lines.extend(super::dice::art(g));
     lines.extend([
-        Line::raw(format!("Cube   {} ({owner})", g.cube.value)),
+        Line::raw(format!("Cube   {} ({owner}){}", g.cube.value, if g.crawford { "  crawford" } else { "" })),
         Line::raw(format!("Score  White {}  Black {}  (to {})", g.score[0], g.score[1], g.target)),
         Line::raw(format!("Mode   {mode}")),
         Line::raw(""),
@@ -29,7 +29,7 @@ pub fn keys() -> Vec<Line<'static>> {
 
 pub fn prompt(g: &Game) -> String {
     match g.phase {
-        Phase::Roll if g.cube.can_double(g.turn) => "Press r to roll or d to double".into(),
+        Phase::Roll if g.may_double() => "Press r to roll or d to double".into(),
         Phase::Roll => "Press r to roll".into(),
         _ if g.thinking() => format!("{:?} is thinking {}", g.turn, SPIN[g.frame as usize / 3 % SPIN.len()]),
         Phase::Move if !g.msg.is_empty() => g.msg.clone(),
