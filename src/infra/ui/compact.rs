@@ -20,6 +20,6 @@ pub fn draw(f: &mut Frame, g: &Game, board: Rect) {
     let shown = log.height as usize;
     let lines: Vec<Line> = g.log.iter().rev().take(shown).rev().map(|s| Line::raw(s.clone())).collect();
     f.render_widget(Paragraph::new(lines).style(Style::default().fg(Color::DarkGray)), log);
-    let hint = "arrows tab enter · u undo · r roll · d double · esc";
+    let hint = "←→↑↓ tab enter · u undo · r roll · d double · esc";
     f.render_widget(Paragraph::new(hint).style(Style::default().fg(Color::DarkGray)), keys);
 }
