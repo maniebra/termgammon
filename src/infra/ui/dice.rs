@@ -1,6 +1,6 @@
 use crate::app::Game;
 use ratatui::{
-    style::{Color, Style},
+    style::Style,
     text::{Line, Span},
 };
 
@@ -33,7 +33,11 @@ pub fn art(g: &Game) -> Vec<Line<'static>> {
 }
 
 fn face(d: u8, live: bool, row: usize) -> Span<'static> {
-    let style = Style::default().fg(if live { Color::White } else { Color::DarkGray });
+    let style = Style::default().fg(if live {
+        super::style::player(crate::domain::Player::White)
+    } else {
+        super::style::dim()
+    });
     let text = match row {
         0 => "╭───────╮".to_string(),
         4 => "╰───────╯".to_string(),

@@ -1,9 +1,26 @@
+use super::theme;
 use crate::app::{Game, OFF};
 use crate::domain::Player;
-use ratatui::style::{Color, Modifier, Style};
+use ratatui::{
+    style::{Color, Modifier, Style},
+    widgets::Block,
+};
 
 pub fn player(p: Player) -> Color {
-    if p == Player::White { Color::White } else { Color::LightRed }
+    let t = theme::get();
+    if p == Player::White { t.white } else { t.black }
+}
+
+pub fn accent() -> Color {
+    theme::get().accent
+}
+
+pub fn dim() -> Color {
+    theme::get().dim
+}
+
+pub fn block(title: &str) -> Block<'static> {
+    Block::bordered().title(title.to_string()).border_style(Style::default().fg(theme::get().border))
 }
 
 pub fn glow(t: u32) -> Color {
@@ -20,25 +37,34 @@ pub fn glow(t: u32) -> Color {
     Color::Rgb(r as u8, g as u8, b as u8)
 }
 
-fn pulse(frame: u32, a: (u8, u8, u8), b: (u8, u8, u8)) -> Color {
+fn pulse(frame: u32, [a, b]: [Color; 2]) -> Color {
     let t = ((frame as f32 * 0.2).sin() + 1.0) / 2.0;
     let mix = |x: u8, y: u8| (x as f32 + (y as f32 - x as f32) * t) as u8;
-    Color::Rgb(mix(a.0, b.0), mix(a.1, b.1), mix(a.2, b.2))
+    match (a, b) {
+        (Color::Rgb(r1, g1, b1), Color::Rgb(r2, g2, b2)) => Color::Rgb(mix(r1, r2), mix(g1, g2), mix(b1, b2)),
+        _ => {
+            if t < 0.5 {
+                a
+            } else {
+                b
+            }
+        }
+    }
 }
 
 pub fn point_bg(i: usize) -> Color {
-    if i.is_multiple_of(2) { Color::Rgb(120, 80, 50) } else { Color::Rgb(70, 50, 35) }
+    theme::get().point[i % 2]
 }
 
 pub fn mark(g: &Game, i: usize, targets: &[Option<usize>], base: Style) -> Style {
     let pos = (i < OFF).then_some(i);
-    let mut s = base;
+    let (mut s, t) = (base, theme::get());
     if g.selected == Some(pos) {
-        s = s.bg(pulse(g.frame, (255, 215, 0), (255, 130, 0))).fg(Color::Black);
+        s = s.bg(pulse(g.frame, t.select)).fg(Color::Black);
     } else if targets.contains(&pos) {
-        s = s.bg(pulse(g.frame, (30, 140, 60), (100, 235, 120))).fg(Color::Black);
+        s = s.bg(pulse(g.frame, t.target)).fg(Color::Black);
     } else if g.last.iter().any(|m| m.to == pos || (m.from == pos && pos.is_some())) {
-        s = s.bg(Color::Rgb(40, 80, 130));
+        s = s.bg(t.last);
     }
     if g.cursor == i {
         s = s.add_modifier(Modifier::REVERSED | Modifier::BOLD);

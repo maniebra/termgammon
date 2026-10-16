@@ -1,10 +1,7 @@
 use super::style;
 use crate::app::Game;
 use crate::domain::Player;
-use ratatui::{
-    style::{Color, Style},
-    text::Span,
-};
+use ratatui::{style::Style, text::Span};
 
 pub const ROWS: usize = 5;
 
@@ -23,6 +20,6 @@ pub fn checker(g: &Game, i: usize, row: usize, targets: &[Option<usize>]) -> Spa
 }
 
 pub fn label(g: &Game, i: usize, targets: &[Option<usize>]) -> Span<'static> {
-    let base = Style::default().fg(Color::DarkGray);
+    let base = Style::default().fg(style::dim());
     Span::styled(format!("{:^3}", i + 1), style::mark(g, i, targets, base))
 }

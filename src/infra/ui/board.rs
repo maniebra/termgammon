@@ -5,7 +5,7 @@ use super::{
 use crate::app::{Game, OFF};
 use crate::domain::Player;
 use ratatui::{
-    style::{Color, Style},
+    style::Style,
     text::{Line, Span},
 };
 
@@ -48,6 +48,6 @@ fn bar(g: &Game) -> Line<'static> {
         let text = if n > 0 { format!("{:^18}", format!("● ×{n}")) } else { " ".repeat(18) };
         Span::styled(text, Style::default().fg(style::player(p)))
     };
-    let label = Span::styled("BAR", Style::default().fg(Color::DarkGray));
+    let label = Span::styled("BAR", Style::default().fg(style::dim()));
     Line::from(vec![side(Player::White), label, side(Player::Black)])
 }

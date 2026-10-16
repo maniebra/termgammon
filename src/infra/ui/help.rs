@@ -1,7 +1,8 @@
 use super::style;
 use crate::app::Game;
+use crate::domain::Player;
 use ratatui::{
-    style::{Color, Modifier, Style},
+    style::{Modifier, Style},
     text::{Line, Span},
 };
 
@@ -12,7 +13,8 @@ pub fn banner(frame: u32) -> Vec<Line<'static>> {
     });
     let row = |shift: u32| {
         let spans = (0..8u32).map(move |i| {
-            let color = if (i + shift + frame / 8).is_multiple_of(2) { Color::White } else { Color::LightRed };
+            let color =
+                style::player(if (i + shift + frame / 8).is_multiple_of(2) { Player::White } else { Player::Black });
             Span::styled("● ", Style::default().fg(color))
         });
         Line::from(spans.collect::<Vec<_>>())

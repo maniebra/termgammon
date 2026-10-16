@@ -5,13 +5,13 @@ use ratatui::{
     Frame,
     layout::{Constraint, Layout, Rect},
     style::Style,
-    widgets::{Block, LineGauge},
+    widgets::LineGauge,
 };
 
 const START_PIPS: f64 = 167.0;
 
 pub fn draw(f: &mut Frame, area: Rect, g: &Game) {
-    let block = Block::bordered().title(" race ");
+    let block = style::block(" race ");
     let rows = Layout::vertical([Constraint::Length(1); 2]).split(block.inner(area));
     f.render_widget(block, area);
     for (row, p) in rows.iter().zip([Player::White, Player::Black]) {

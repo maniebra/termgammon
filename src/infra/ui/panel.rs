@@ -1,7 +1,7 @@
 use super::style;
 use crate::app::{Game, Phase};
 use ratatui::{
-    style::{Color, Modifier, Style},
+    style::{Modifier, Style},
     text::{Line, Span},
 };
 
@@ -16,7 +16,7 @@ pub fn info(g: &Game) -> Vec<Line<'static>> {
         Line::raw(format!("Score  White {}  Black {}  (to {})", g.score[0], g.score[1], g.target)),
         Line::raw(format!("Mode   {mode}")),
         Line::raw(""),
-        Line::styled(prompt(g), Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD)),
+        Line::styled(prompt(g), Style::default().fg(style::accent()).add_modifier(Modifier::BOLD)),
     ]);
     lines
 }

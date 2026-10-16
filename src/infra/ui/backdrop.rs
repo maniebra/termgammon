@@ -1,11 +1,8 @@
 use super::fx::hash;
-use ratatui::{
-    Frame,
-    style::{Color, Style},
-};
+use ratatui::{Frame, style::Style};
 
 pub fn draw(f: &mut Frame, frame: u32) {
-    let area = f.area();
+    let (area, palette) = (f.area(), super::theme::get());
     if area.is_empty() {
         return;
     }
@@ -14,11 +11,8 @@ pub fn draw(f: &mut Frame, frame: u32) {
         let speed = 1 + hash(i * 11) % 4;
         let x = area.x + (hash(i) % w) as u16;
         let y = area.y + ((hash(i * 5) + frame * speed / 4) % h) as u16;
-        let (glyph, color) = match i % 3 {
-            0 => ("○", Color::Rgb(70, 70, 80)),
-            1 => ("●", Color::Rgb(110, 40, 40)),
-            _ => ("·", Color::Rgb(60, 60, 60)),
-        };
+        let glyph = ["○", "●", "·"][i as usize % 3];
+        let color = palette.backdrop[i as usize % 3];
         f.buffer_mut()[(x, y)].set_symbol(glyph).set_style(Style::default().fg(color));
     }
 }

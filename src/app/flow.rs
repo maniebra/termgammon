@@ -19,7 +19,7 @@ impl App {
             (Item::Quit, Screen::Pause) => self.open(Screen::Confirm(Ask::Quit)),
             (Item::MainMenu | Item::Yes, Screen::Confirm(Ask::Leave) | Screen::MatchOver) => self.open(Screen::Main),
             (Item::Quit, _) | (Item::Yes, _) => self.quit = true,
-            (Item::Level | Item::Side | Item::Length, _) => self.adjust(item),
+            (Item::Level | Item::Side | Item::Length | Item::Theme, _) => self.adjust(item),
             _ => self.close(),
         }
     }
@@ -28,6 +28,7 @@ impl App {
         match item {
             Item::Level => self.game.level = self.game.level.next(),
             Item::Side => self.side = self.side.other(),
+            Item::Theme => self.theme = self.theme.next(),
             Item::Length => {
                 let i = LENGTHS.iter().position(|&n| n == self.game.target).unwrap_or(0);
                 self.game.target = LENGTHS[(i + 1) % LENGTHS.len()];

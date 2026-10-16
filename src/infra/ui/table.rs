@@ -4,7 +4,7 @@ use ratatui::{
     Frame,
     layout::{Constraint, Layout, Rect},
     text::Line,
-    widgets::{Block, Paragraph},
+    widgets::Paragraph,
 };
 
 pub fn draw(f: &mut Frame, g: &Game) {
@@ -13,7 +13,7 @@ pub fn draw(f: &mut Frame, g: &Game) {
         let text = format!("Terminal too small ({w}×{h}).\nNeed at least 50×19.\nEsc for menu.");
         return f.render_widget(Paragraph::new(text).centered(), f.area());
     };
-    f.render_widget(Paragraph::new(super::board::lines(g)).block(Block::bordered().title(" termgammon ")), board);
+    f.render_widget(Paragraph::new(super::board::lines(g)).block(super::style::block(" termgammon ")), board);
     match layout::fit(f.area()) {
         Fit::Full => side(f, g, board),
         _ => super::compact::draw(f, g, board),
@@ -28,9 +28,9 @@ fn side(f: &mut Frame, g: &Game, board: Rect) {
     let [info, keys, _] =
         Layout::vertical([Constraint::Length(14), Constraint::Length(5), Constraint::Min(0)]).areas(right);
     super::race::draw(f, race, g);
-    f.render_widget(Paragraph::new(super::panel::info(g)).block(Block::bordered().title(" game ")), info);
+    f.render_widget(Paragraph::new(super::panel::info(g)).block(super::style::block(" game ")), info);
     let shown = log.height.saturating_sub(2) as usize;
     let lines: Vec<Line> = g.log.iter().rev().take(shown).rev().map(|s| Line::raw(s.clone())).collect();
-    f.render_widget(Paragraph::new(lines).block(Block::bordered().title(" log ")), log);
-    f.render_widget(Paragraph::new(super::panel::keys()).block(Block::bordered().title(" keys ")), keys);
+    f.render_widget(Paragraph::new(lines).block(super::style::block(" log ")), log);
+    f.render_widget(Paragraph::new(super::panel::keys()).block(super::style::block(" keys ")), keys);
 }

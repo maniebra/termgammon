@@ -11,6 +11,7 @@ mod pace;
 mod phase;
 mod screen;
 mod shell;
+mod theme;
 mod turn;
 
 pub use action::Action;
@@ -20,3 +21,4 @@ pub use menu::Item;
 pub use phase::Phase;
 pub use screen::{Ask, Screen};
 pub use shell::App;
+pub use theme::{THEMES, Theme};

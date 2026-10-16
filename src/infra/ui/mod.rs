@@ -11,6 +11,7 @@ mod panel;
 mod race;
 mod style;
 mod table;
+mod theme;
 
 pub use layout::board;
 
@@ -19,6 +20,7 @@ use ratatui::Frame;
 use ratatui::text::Line;
 
 pub fn draw(f: &mut Frame, app: &App) {
+    theme::set(app.theme);
     match app.screen {
         Screen::Main => {
             backdrop::draw(f, app.game.frame);

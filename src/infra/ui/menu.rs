@@ -2,9 +2,9 @@ use crate::app::{App, Item};
 use ratatui::{
     Frame,
     layout::{Constraint, Flex, Layout},
-    style::{Color, Modifier, Style},
+    style::{Modifier, Style},
     text::Line,
-    widgets::{Block, Clear, Paragraph},
+    widgets::{Clear, Paragraph},
 };
 
 pub fn popup(f: &mut Frame, app: &App, title: &str, mut lines: Vec<Line<'static>>) {
@@ -19,14 +19,14 @@ pub fn popup(f: &mut Frame, app: &App, title: &str, mut lines: Vec<Line<'static>
     let width = width.max(30).min(10 + grow * 8);
     let [area] = Layout::vertical([Constraint::Length(height)]).flex(Flex::Center).areas(f.area());
     let [area] = Layout::horizontal([Constraint::Length(width)]).flex(Flex::Center).areas(area);
-    let block = Block::bordered().title(title.to_string()).padding(ratatui::widgets::Padding::uniform(1));
+    let block = super::style::block(title).padding(ratatui::widgets::Padding::uniform(1));
     f.render_widget(Clear, area);
     f.render_widget(Paragraph::new(lines).block(block), area);
 }
 
 fn entry(app: &App, item: Item, selected: bool) -> Line<'static> {
     let text = format!("{} {}", if selected { "▶" } else { " " }, label(app, item));
-    let style = Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD);
+    let style = Style::default().fg(super::style::accent()).add_modifier(Modifier::BOLD);
     if selected { Line::styled(text, style) } else { Line::raw(text) }
 }
 
@@ -43,6 +43,7 @@ fn label(app: &App, item: Item) -> String {
         Item::Level => format!("AI level  ◀ {:?} ▶", app.game.level),
         Item::Side => format!("AI plays  ◀ {:?} ▶", app.side),
         Item::Length => format!("Match to  ◀ {} ▶", app.game.target),
+        Item::Theme => format!("Theme     ◀ {:?} ▶", app.theme),
         Item::Start => "Start".into(),
         Item::Rematch => "Rematch".into(),
         Item::Yes => "Yes".into(),

@@ -23,6 +23,7 @@ fn apply<'a>(a: &mut App, pairs: impl Iterator<Item = (&'a str, &'a str)>) {
         match key {
             "level" => a.game.level = names::level(value).unwrap_or(a.game.level),
             "side" => a.side = names::side(value).unwrap_or(a.side),
+            "theme" => a.theme = names::theme(value).unwrap_or(a.theme),
             "length" => a.game.target = value.parse().unwrap_or(a.game.target).clamp(1, 25),
             _ => {}
         }
@@ -31,8 +32,8 @@ fn apply<'a>(a: &mut App, pairs: impl Iterator<Item = (&'a str, &'a str)>) {
 
 pub fn save(a: &App) {
     let Some(p) = path() else { return };
-    let text =
-        format!("level={}\nside={}\nlength={}\n", names::lower(a.game.level), names::lower(a.side), a.game.target);
+    let (level, side, theme) = (names::lower(a.game.level), names::lower(a.side), names::lower(a.theme));
+    let text = format!("level={level}\nside={side}\nlength={}\ntheme={theme}\n", a.game.target);
     let _ = p.parent().map(fs::create_dir_all);
     let _ = fs::write(p, text);
 }

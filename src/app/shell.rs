@@ -9,6 +9,7 @@ pub struct App {
     pub vs_ai: bool,
     pub quit: bool,
     pub opened: u32,
+    pub theme: super::Theme,
     pub(super) back: Screen,
 }
 
@@ -16,7 +17,17 @@ impl App {
     pub fn new() -> Self {
         let game = Game::new();
         let (screen, side) = (Screen::Main, Player::Black);
-        Self { game, screen, index: 0, side, vs_ai: true, quit: false, opened: 0, back: screen }
+        Self {
+            game,
+            screen,
+            index: 0,
+            side,
+            vs_ai: true,
+            quit: false,
+            opened: 0,
+            theme: super::Theme::Classic,
+            back: screen,
+        }
     }
 
     pub fn items(&self) -> &'static [Item] {
