@@ -27,7 +27,7 @@ pub fn keys() -> Vec<Line<'static>> {
         .to_vec()
 }
 
-fn prompt(g: &Game) -> String {
+pub fn prompt(g: &Game) -> String {
     match g.phase {
         Phase::Roll if g.cube.can_double(g.turn) => "Press r to roll or d to double".into(),
         Phase::Roll => "Press r to roll".into(),

@@ -9,7 +9,7 @@ pub fn action(m: MouseEvent, screen: Rect) -> Option<Action> {
     if m.kind != MouseEventKind::Down(ratatui::crossterm::event::MouseButton::Left) {
         return None;
     }
-    let [board, _] = ui::columns(screen);
+    let board = ui::board(screen)?;
     let dx = m.column.checked_sub(board.x + 1)?;
     let dy = m.row.checked_sub(board.y + 1)?;
     let col = match dx {

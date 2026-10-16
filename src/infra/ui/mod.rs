@@ -1,16 +1,18 @@
 mod backdrop;
 mod board;
 mod cell;
+mod compact;
 mod dice;
 mod fx;
 mod help;
+mod layout;
 mod menu;
 mod panel;
 mod race;
 mod style;
 mod table;
 
-pub use table::columns;
+pub use layout::board;
 
 use crate::app::{App, Ask, Screen};
 use ratatui::text::Line;
@@ -46,6 +48,25 @@ pub fn draw(f: &mut Frame, app: &App) {
         Screen::MatchOver => {
             table::draw(f, &app.game);
             menu::popup(f, app, " match over ", help::result(&app.game));
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::app::Action::*;
+
+    #[test]
+    fn renders_at_any_size() {
+        let mut app = App::new();
+        for step in [vec![], vec![Enter], vec![Up, Up, Enter], vec![Roll, Enter, Enter], vec![Cancel, Down, Down]] {
+            step.into_iter().for_each(|a| app.handle(a));
+            (0..30).for_each(|_| app.tick());
+            for (w, h) in [(1, 1), (20, 8), (50, 19), (60, 22), (96, 22), (160, 50)] {
+                let mut t = ratatui::Terminal::new(ratatui::backend::TestBackend::new(w, h)).unwrap();
+                t.draw(|f| draw(f, &app)).unwrap();
+            }
         }
     }
 }
