@@ -14,10 +14,7 @@ impl Board {
         } else {
             (0..24).filter(|&i| self.count(p, i) > 0).map(Some).collect()
         };
-        sources
-            .iter()
-            .flat_map(|&from| dice.iter().filter_map(move |&die| self.try_move(p, from, die)))
-            .collect()
+        sources.iter().flat_map(|&from| dice.iter().filter_map(move |&die| self.try_move(p, from, die))).collect()
     }
 
     fn try_move(&self, p: Player, from: Option<usize>, die: u8) -> Option<Move> {

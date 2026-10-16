@@ -20,7 +20,9 @@ pub fn fit(area: Rect) -> Fit {
 }
 
 pub fn columns(area: Rect) -> [Rect; 2] {
-    Layout::horizontal([Constraint::Length(BOARD.0), Constraint::Length(FULL.0 - BOARD.0)]).flex(Flex::Center).areas(area)
+    Layout::horizontal([Constraint::Length(BOARD.0), Constraint::Length(FULL.0 - BOARD.0)])
+        .flex(Flex::Center)
+        .areas(area)
 }
 
 pub fn board(area: Rect) -> Option<Rect> {

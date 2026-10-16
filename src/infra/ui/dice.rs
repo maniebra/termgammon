@@ -21,7 +21,9 @@ pub fn art(g: &Game) -> Vec<Line<'static>> {
     (0..5)
         .map(|row| {
             let shake = if g.anim > 0 { super::fx::hash(g.frame * 4 + row as u32) as usize % 3 } else { 0 };
-            let mut spans: Vec<Span> = std::iter::once(Span::raw(" ".repeat(shake))).chain(faces.iter().map(|&(d, live)| face(d, live, row))).collect();
+            let mut spans: Vec<Span> = std::iter::once(Span::raw(" ".repeat(shake)))
+                .chain(faces.iter().map(|&(d, live)| face(d, live, row)))
+                .collect();
             if row == 2 {
                 spans.push(Span::raw(extra.clone()));
             }

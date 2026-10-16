@@ -26,7 +26,8 @@ pub fn draw(f: &mut Frame, board: Rect, text: &str, age: u32, frame: u32) {
     let width = text.chars().count() as u16 * 2 + 3;
     let [area] = Layout::vertical([Constraint::Length(3)]).flex(Flex::Center).areas(board);
     let [area] = Layout::horizontal([Constraint::Length(width)]).flex(Flex::Center).areas(area);
-    let block = Block::bordered().border_type(BorderType::Double).border_style(Style::default().fg(style::glow(frame * 3)));
+    let block =
+        Block::bordered().border_type(BorderType::Double).border_style(Style::default().fg(style::glow(frame * 3)));
     f.render_widget(Clear, area);
     f.render_widget(Paragraph::new(Line::from(spans)).centered().block(block), area);
 }

@@ -15,8 +15,8 @@ mod table;
 pub use layout::board;
 
 use crate::app::{App, Ask, Screen};
-use ratatui::text::Line;
 use ratatui::Frame;
+use ratatui::text::Line;
 
 pub fn draw(f: &mut Frame, app: &App) {
     match app.screen {

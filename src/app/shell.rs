@@ -26,7 +26,9 @@ impl App {
     pub fn handle(&mut self, a: Action) {
         let before = self.screen;
         match (self.screen, a) {
-            (Screen::Playing, Action::Cancel | Action::Quit) if self.game.selected.is_none() => self.open(Screen::Pause),
+            (Screen::Playing, Action::Cancel | Action::Quit) if self.game.selected.is_none() => {
+                self.open(Screen::Pause)
+            }
             (Screen::Playing, _) => self.game.handle(a),
             (_, Action::Quit) => self.pick(Item::Quit),
             (_, Action::Cancel) => self.close(),

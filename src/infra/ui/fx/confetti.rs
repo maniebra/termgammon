@@ -6,7 +6,8 @@ use ratatui::{
 
 const LIFE: u32 = 120;
 const GLYPHS: [&str; 6] = ["▪", "▴", "◆", "●", "✦", "❖"];
-const COLORS: [Color; 6] = [Color::Yellow, Color::LightRed, Color::LightMagenta, Color::LightCyan, Color::LightGreen, Color::White];
+const COLORS: [Color; 6] =
+    [Color::Yellow, Color::LightRed, Color::LightMagenta, Color::LightCyan, Color::LightGreen, Color::White];
 
 pub fn draw(f: &mut Frame, age: u32) {
     if age >= LIFE {

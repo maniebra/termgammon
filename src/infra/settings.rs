@@ -31,7 +31,8 @@ fn apply<'a>(a: &mut App, pairs: impl Iterator<Item = (&'a str, &'a str)>) {
 
 pub fn save(a: &App) {
     let Some(p) = path() else { return };
-    let text = format!("level={}\nside={}\nlength={}\n", names::lower(a.game.level), names::lower(a.side), a.game.target);
+    let text =
+        format!("level={}\nside={}\nlength={}\n", names::lower(a.game.level), names::lower(a.side), a.game.target);
     let _ = p.parent().map(fs::create_dir_all);
     let _ = fs::write(p, text);
 }
