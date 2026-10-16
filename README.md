@@ -9,6 +9,7 @@ Backgammon in the terminal, built with [ratatui](https://ratatui.rs).
 - Doubling cube, gammons and backgammons, and matches to 1, 3, 5, 7 or 9 points
 - Animated dice, highlighted last move, pip-count race gauges and a move log
 - Undo within a turn, keyboard and mouse controls
+- Themes: classic, ocean, neon, forest, mono and basic (16 colors, for terminals without truecolor)
 
 ## Install
 
@@ -24,10 +25,10 @@ make uninstall
 ## Usage
 
 ```sh
-termgammon [--level easy|medium|hard] [--side black|white] [--length N]
+termgammon [--level easy|medium|hard] [--side black|white] [--length N] [--theme NAME]
 ```
 
-Level, AI side and match length are saved on quit to
+Theme, level, AI side and match length are saved on quit to
 `$XDG_CONFIG_HOME/termgammon/settings` (or `~/.config/termgammon/settings`).
 Command-line flags override saved values.
 
