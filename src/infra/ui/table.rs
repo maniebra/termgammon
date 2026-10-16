@@ -23,4 +23,5 @@ pub fn draw(f: &mut Frame, g: &Game) {
     let lines: Vec<Line> = g.log.iter().rev().take(shown).rev().map(|s| Line::raw(s.clone())).collect();
     f.render_widget(Paragraph::new(lines).block(Block::bordered().title(" log ")), log);
     f.render_widget(Paragraph::new(super::panel::keys()).block(Block::bordered().title(" keys ")), keys);
+    super::fx::draw(f, g, board);
 }

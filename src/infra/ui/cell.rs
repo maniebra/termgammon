@@ -12,8 +12,9 @@ pub fn checker(g: &Game, i: usize, row: usize, targets: &[Option<usize>]) -> Spa
     let v = g.board.points[i];
     let n = v.unsigned_abs() as usize;
     let owner = if v > 0 { Player::White } else { Player::Black };
+    let landing = row + 1 == n.min(ROWS) && g.sliding_into(Some(i));
     let text = match row {
-        r if r >= n => "   ".to_string(),
+        r if r >= n || landing => "   ".to_string(),
         r if r == ROWS - 1 && n > ROWS => format!("{n:>2} "),
         _ => " ● ".to_string(),
     };

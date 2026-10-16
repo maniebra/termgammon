@@ -1,13 +1,23 @@
 use super::style;
 use crate::app::Game;
 use ratatui::{
-    style::{Color, Style},
-    text::Line,
+    style::{Color, Modifier, Style},
+    text::{Line, Span},
 };
 
-pub fn banner() -> Vec<Line<'static>> {
-    let style = Style::default().fg(Color::LightRed);
-    ["●  ○  ●  ○  ●  ○", "  t e r m g a m m o n", "○  ●  ○  ●  ○  ●"].map(|s| Line::styled(s, style)).to_vec()
+pub fn banner(frame: u32) -> Vec<Line<'static>> {
+    let title = "T E R M G A M M O N".chars().enumerate().map(|(i, c)| {
+        let wave = Style::default().fg(style::glow(frame * 4 + i as u32 * 12)).add_modifier(Modifier::BOLD);
+        Span::styled(c.to_string(), wave)
+    });
+    let row = |shift: u32| {
+        let spans = (0..8u32).map(move |i| {
+            let color = if (i + shift + frame / 8).is_multiple_of(2) { Color::White } else { Color::LightRed };
+            Span::styled("● ", Style::default().fg(color))
+        });
+        Line::from(spans.collect::<Vec<_>>())
+    };
+    vec![row(0), Line::from(title.collect::<Vec<_>>()), row(1)]
 }
 
 pub fn result(g: &Game) -> Vec<Line<'static>> {

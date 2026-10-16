@@ -14,8 +14,11 @@ pub fn popup(f: &mut Frame, app: &App, title: &str, mut lines: Vec<Line<'static>
     }
     lines.extend(app.items().iter().enumerate().map(|(i, &item)| entry(app, item, i == app.index)));
     let width = lines.iter().map(|l| l.width()).max().unwrap_or(0) as u16 + 6;
-    let [area] = Layout::vertical([Constraint::Length(lines.len() as u16 + 4)]).flex(Flex::Center).areas(f.area());
-    let [area] = Layout::horizontal([Constraint::Length(width.max(30))]).flex(Flex::Center).areas(area);
+    let grow = app.game.frame.wrapping_sub(app.opened).min(8) as u16;
+    let height = (lines.len() as u16 + 4).min(3 + grow * 3);
+    let width = width.max(30).min(10 + grow * 8);
+    let [area] = Layout::vertical([Constraint::Length(height)]).flex(Flex::Center).areas(f.area());
+    let [area] = Layout::horizontal([Constraint::Length(width)]).flex(Flex::Center).areas(area);
     let block = Block::bordered().title(title.to_string()).padding(ratatui::widgets::Padding::uniform(1));
     f.render_widget(Clear, area);
     f.render_widget(Paragraph::new(lines).block(block), area);
