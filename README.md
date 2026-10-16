@@ -47,14 +47,15 @@ No browser. No ads. No account. Just you, the dice, and a worthy opponent.
 
 ## Get it in 10 seconds
 
-**Download** a ready-to-run build for Linux, macOS or Windows from the [Releases](../../releases) page.
+**Download** a ready-to-run build from [Releases](https://github.com/maniebra/termgammon/releases): `.deb`, `.rpm` and AppImage for Linux, plus builds for macOS and Windows.
 
-**Or build it yourself:**
+**Or with cargo:**
 
 ```sh
-make install
-termgammon
+cargo install termgammon
 ```
+
+**Or from source:** `make install`
 
 ## How to play
 
