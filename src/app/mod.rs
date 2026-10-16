@@ -10,6 +10,7 @@ mod input;
 mod menu;
 mod pace;
 mod phase;
+mod resign;
 mod screen;
 mod shell;
 mod theme;

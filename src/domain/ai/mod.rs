@@ -2,7 +2,7 @@ mod cube;
 mod level;
 mod search;
 
-pub use cube::{takes, wants_double};
+pub use cube::{accepts_resign, takes, wants_double};
 pub use level::Level;
 
 use super::{Board, Move, Player};

@@ -52,6 +52,11 @@ pub fn draw(f: &mut Frame, app: &App) {
             let text = if ask == Ask::Quit { "Quit termgammon?" } else { "Abandon this match?" };
             menu::popup(f, app, " confirm ", vec![Line::raw(text)]);
         }
+        Screen::Resign => {
+            table::draw(f, &app.game);
+            let text = format!("Give up this game? Cube is at {}.", app.game.cube.value);
+            menu::popup(f, app, " resign ", vec![Line::raw(text)]);
+        }
         Screen::MatchOver => {
             table::draw(f, &app.game);
             menu::popup(f, app, " match over ", help::result(&app.game));

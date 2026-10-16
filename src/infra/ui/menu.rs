@@ -45,6 +45,8 @@ fn label(app: &App, item: Item) -> String {
         Item::Length => format!("Match to  ◀ {} ▶", app.game.target),
         Item::Theme => format!("Theme     ◀ {:?} ▶", app.theme),
         Item::Motion => format!("Animations  ◀ {} ▶", if app.game.motion { "On" } else { "Off" }),
+        Item::Forfeit => "Resign".into(),
+        Item::Resign(n) => ["", "Resign a single game", "Resign a gammon", "Resign a backgammon"][n as usize].into(),
         Item::Start => "Start".into(),
         Item::Rematch => "Rematch".into(),
         Item::Yes => "Yes".into(),

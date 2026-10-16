@@ -14,4 +14,5 @@ pub enum Screen {
     Help,
     Confirm(Ask),
     MatchOver,
+    Resign,
 }

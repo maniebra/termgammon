@@ -15,6 +15,11 @@ impl App {
             (Item::Resume, _) => self.screen = Screen::Playing,
             (Item::Settings, _) => self.open(Screen::Settings),
             (Item::Help, _) => self.open(Screen::Help),
+            (Item::Forfeit, _) => self.open(Screen::Resign),
+            (Item::Resign(n), _) => {
+                self.game.resign(n);
+                self.screen = Screen::Playing;
+            }
             (Item::MainMenu, Screen::Pause) => self.open(Screen::Confirm(Ask::Leave)),
             (Item::Quit, Screen::Pause) => self.open(Screen::Confirm(Ask::Quit)),
             (Item::MainMenu | Item::Yes, Screen::Confirm(Ask::Leave) | Screen::MatchOver) => self.open(Screen::Main),

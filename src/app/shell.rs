@@ -80,7 +80,7 @@ impl App {
     pub(super) fn close(&mut self) {
         self.screen = match self.screen {
             Screen::Pause => Screen::Playing,
-            Screen::Setup | Screen::Settings | Screen::Help | Screen::Confirm(_) => self.back,
+            Screen::Setup | Screen::Settings | Screen::Help | Screen::Confirm(_) | Screen::Resign => self.back,
             _ => Screen::Main,
         };
         self.index = 0;
