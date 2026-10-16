@@ -59,6 +59,12 @@ The code follows a small DDD layout:
 - `src/infra` – terminal, keys, mouse, settings and rendering
 - `src/shared` – dice randomness
 
+## Releasing
+
+Publish a GitHub release with a tag like `v1.2.3`. The release workflow writes that
+version into `Cargo.toml` before building, so the version in the repo never needs
+bumping by hand (it stays `0.0.0-dev`).
+
 ## License
 
 [MIT](LICENSE)
