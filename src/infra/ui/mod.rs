@@ -24,7 +24,7 @@ pub fn draw(f: &mut Frame, app: &App) {
     match app.screen {
         Screen::Main => {
             backdrop::draw(f, app.game.frame);
-            menu::popup(f, app, " termgammon ", help::banner(app.game.frame));
+            menu::popup(f, app, concat!(" termgammon v", env!("CARGO_PKG_VERSION"), " "), help::banner(app.game.frame));
         }
         Screen::Playing => table::draw(f, &app.game),
         Screen::Pause => {
