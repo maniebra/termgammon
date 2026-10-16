@@ -13,6 +13,13 @@ impl Game {
             self.wait -= 1;
             return;
         }
+        if self.forced() {
+            let m = self.legal()[0];
+            self.selected = None;
+            self.play(m);
+            self.wait = AI_DELAY / 2;
+            return self.advance();
+        }
         if !self.thinking() {
             return;
         }
@@ -26,6 +33,10 @@ impl Game {
         }
         self.wait = AI_DELAY;
         self.advance();
+    }
+
+    fn forced(&self) -> bool {
+        self.phase == Phase::Move && self.ai != Some(self.turn) && self.legal().len() == 1
     }
 
     pub fn thinking(&self) -> bool {
