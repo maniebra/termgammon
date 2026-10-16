@@ -23,10 +23,7 @@ impl Game {
             (Action::Undo, Phase::Move) => self.undo(),
             (Action::Next, Phase::Move) => self.next(),
             (Action::Hint, Phase::Move) => self.hint(),
-            (Action::Click(i), Phase::Move) => {
-                self.cursor = i;
-                self.enter();
-            }
+            (Action::Click(i), Phase::Move) => self.enter_at(i),
             (Action::Enter, Phase::Over) => self.reset(),
             _ => {}
         }
@@ -36,6 +33,11 @@ impl Game {
         self.ai = ai;
         self.selected = None;
         self.advance();
+    }
+
+    fn enter_at(&mut self, i: usize) {
+        self.cursor = i;
+        self.enter();
     }
 
     fn enter(&mut self) {
@@ -54,7 +56,10 @@ impl Game {
             (None, Some(from)) if from == at => self.selected = None,
             (None, _) if movable && self.board.bar[self.turn.idx()] == 0 => {
                 self.selected = Some(at);
-                self.next();
+                match self.targets().as_slice() {
+                    [to] => self.enter_at(to.unwrap_or(OFF)),
+                    _ => self.next(),
+                }
             }
             (None, Some(_)) => self.msg = "Can't move there, pick a green spot".into(),
             (None, None) => self.msg = "No legal move from that point".into(),
