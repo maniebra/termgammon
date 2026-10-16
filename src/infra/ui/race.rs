@@ -11,7 +11,11 @@ use ratatui::{
 const START_PIPS: f64 = 167.0;
 
 pub fn draw(f: &mut Frame, area: Rect, g: &Game) {
-    let block = style::block(" race ");
+    let (w, b) = (g.board.pips(Player::White), g.board.pips(Player::Black));
+    let leader = if w <= b { Player::White } else { Player::Black };
+    let chance = (g.board.win_chance(leader) * 100.0).round();
+    let title = format!(" race · {leader:?} leads by {} · ~{chance}% to win ", (w - b).abs());
+    let block = style::block(&title);
     let rows = Layout::vertical([Constraint::Length(1); 2]).split(block.inner(area));
     f.render_widget(block, area);
     for (row, p) in rows.iter().zip([Player::White, Player::Black]) {
