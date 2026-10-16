@@ -16,6 +16,7 @@ pub fn action(key: KeyCode) -> Option<Action> {
         KeyCode::Char('p') => Some(Action::Pass),
         KeyCode::Char('u') => Some(Action::Undo),
         KeyCode::Tab => Some(Action::Next),
+        KeyCode::Char('?') => Some(Action::Hint),
         _ => None,
     }
 }

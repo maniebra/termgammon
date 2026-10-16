@@ -41,7 +41,7 @@ pub fn rules() -> Vec<Line<'static>> {
         "r roll   d double   y take   p pass",
         "arrows move cursor (↑/↓ switch rows)   tab next playable",
         "enter or click: pick a checker, then a green spot",
-        "u undo   esc menu",
+        "u undo   ? hint   esc menu",
         "",
         "Gammon (loser bore off none) scores 2×, backgammon 3×.",
     ]

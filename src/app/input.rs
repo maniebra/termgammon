@@ -22,6 +22,7 @@ impl Game {
             (Action::Enter, Phase::Move) => self.enter(),
             (Action::Undo, Phase::Move) => self.undo(),
             (Action::Next, Phase::Move) => self.next(),
+            (Action::Hint, Phase::Move) => self.hint(),
             (Action::Click(i), Phase::Move) => {
                 self.cursor = i;
                 self.enter();
