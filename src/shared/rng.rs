@@ -1,11 +1,16 @@
 use std::time::{SystemTime, UNIX_EPOCH};
 
+#[derive(Clone)]
 pub struct Rng(u64);
 
 impl Rng {
     pub fn new() -> Self {
         let seed = SystemTime::now().duration_since(UNIX_EPOCH).map_or(1, |d| d.as_nanos() as u64);
         Self(seed | 1)
+    }
+
+    pub fn seeded(seed: u64) -> Self {
+        Self(seed.wrapping_mul(0x9e37_79b9_7f4a_7c15) | 1)
     }
 
     pub fn below(&mut self, n: usize) -> usize {

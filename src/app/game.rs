@@ -79,6 +79,10 @@ impl Game {
         self.advance();
     }
 
+    pub fn seed(&mut self, seed: u64) {
+        self.rng = Rng::seeded(seed);
+    }
+
     pub fn match_winner(&self) -> Option<Player> {
         [Player::White, Player::Black].into_iter().find(|p| self.score[p.idx()] >= self.target)
     }

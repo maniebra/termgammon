@@ -25,6 +25,7 @@ fn apply<'a>(a: &mut App, pairs: impl Iterator<Item = (&'a str, &'a str)>) {
             "side" => a.side = names::side(value).unwrap_or(a.side),
             "animations" => a.game.motion = value != "off",
             "theme" => a.theme = names::theme(value).unwrap_or(a.theme),
+            "seed" => value.parse().into_iter().for_each(|s| a.game.seed(s)),
             "length" => a.game.target = value.parse().unwrap_or(a.game.target).clamp(1, 25),
             _ => {}
         }
