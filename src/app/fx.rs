@@ -19,6 +19,9 @@ pub struct Effect {
 
 impl Game {
     pub(super) fn fx(&mut self, fx: Fx) {
+        if !self.motion {
+            return;
+        }
         self.effects.push(Effect { fx, start: self.frame });
     }
 
@@ -28,6 +31,10 @@ impl Game {
 
     pub fn sliding_into(&self, to: Option<usize>) -> bool {
         self.effects.iter().any(|e| matches!(e.fx, Fx::Slide { to: t, .. } if t == to) && self.age(e) < SLIDE)
+    }
+
+    pub fn clock(&self) -> u32 {
+        if self.motion { self.frame } else { 0 }
     }
 
     pub fn animate(&mut self) {

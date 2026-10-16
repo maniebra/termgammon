@@ -23,8 +23,13 @@ pub fn draw(f: &mut Frame, app: &App) {
     theme::set(app.theme);
     match app.screen {
         Screen::Main => {
-            backdrop::draw(f, app.game.frame);
-            menu::popup(f, app, concat!(" termgammon v", env!("CARGO_PKG_VERSION"), " "), help::banner(app.game.frame));
+            backdrop::draw(f, &app.game);
+            menu::popup(
+                f,
+                app,
+                concat!(" termgammon v", env!("CARGO_PKG_VERSION"), " "),
+                help::banner(app.game.clock()),
+            );
         }
         Screen::Playing => table::draw(f, &app.game),
         Screen::Pause => {
@@ -32,7 +37,7 @@ pub fn draw(f: &mut Frame, app: &App) {
             menu::popup(f, app, " paused ", vec![]);
         }
         Screen::Settings | Screen::Setup | Screen::Help => {
-            backdrop::draw(f, app.game.frame);
+            backdrop::draw(f, &app.game);
             let title = match app.screen {
                 Screen::Settings => " settings ",
                 Screen::Help => " how to play ",

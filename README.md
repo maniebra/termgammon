@@ -74,7 +74,7 @@ New to backgammon? Open **How to play** from the main menu for the rules in thir
 ## For tinkerers
 
 ```sh
-termgammon --level hard --side white --length 5 --theme neon
+termgammon --level hard --side white --length 5 --theme neon --animations off
 ```
 
 Your choices are remembered between sessions. Contributions are welcome: `make test` and you're off.

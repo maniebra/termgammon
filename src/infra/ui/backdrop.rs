@@ -1,7 +1,12 @@
 use super::fx::hash;
+use crate::app::Game;
 use ratatui::{Frame, style::Style};
 
-pub fn draw(f: &mut Frame, frame: u32) {
+pub fn draw(f: &mut Frame, g: &Game) {
+    if !g.motion {
+        return;
+    }
+    let frame = g.frame;
     let (area, palette) = (f.area(), super::theme::get());
     if area.is_empty() {
         return;

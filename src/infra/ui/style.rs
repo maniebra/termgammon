@@ -60,9 +60,9 @@ pub fn mark(g: &Game, i: usize, targets: &[Option<usize>], base: Style) -> Style
     let pos = (i < OFF).then_some(i);
     let (mut s, t) = (base, theme::get());
     if g.selected == Some(pos) {
-        s = s.bg(pulse(g.frame, t.select)).fg(Color::Black);
+        s = s.bg(pulse(g.clock(), t.select)).fg(Color::Black);
     } else if targets.contains(&pos) {
-        s = s.bg(pulse(g.frame, t.target)).fg(Color::Black);
+        s = s.bg(pulse(g.clock(), t.target)).fg(Color::Black);
     } else if g.last.iter().any(|m| m.to == pos || (m.from == pos && pos.is_some())) {
         s = s.bg(t.last);
     }

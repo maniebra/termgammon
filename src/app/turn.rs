@@ -72,7 +72,7 @@ impl Game {
     fn show(&mut self, a: u8, b: u8) {
         self.rolled = vec![a, b];
         self.last.clear();
-        self.anim = ROLL_FRAMES;
+        self.anim = if self.motion { ROLL_FRAMES } else { 0 };
     }
 
     pub(super) fn note(&mut self, s: &str) {
